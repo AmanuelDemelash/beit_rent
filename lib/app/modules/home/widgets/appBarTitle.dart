@@ -10,11 +10,11 @@ class AppBarTitle extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: 51,
-          width: 51,
+          height: 50,
+          width: 50,
           padding: const EdgeInsets.all(6.0),
           child: Image.asset("assets/images/icon.png",height: 50,width: 50,fit: BoxFit.fill,),
-        ),const SizedBox(width: 10,),
+        ),const SizedBox(width: 8,),
         const Text('Beit Rent',style: TextStyle(fontWeight: FontWeight.bold),),
       ],
     );

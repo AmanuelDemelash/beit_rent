@@ -55,12 +55,12 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.APARTMENT_DETAIL,
-      page: () => const ApartmentDetailView(),
+      page: () => ApartmentDetailView(),
       binding: ApartmentDetailBinding(),
       children: [
         GetPage(
           name: _Paths.OVERVIEW_APARTMENT,
-          page: () => const OverViewView(),
+          page: () => OverViewView(),
           binding: AccountBinding(),
         ),
       ]
