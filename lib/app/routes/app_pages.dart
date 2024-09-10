@@ -1,5 +1,6 @@
+import 'package:beit_rent/app/modules/auth/views/forgot_password_view.dart';
+import 'package:beit_rent/app/modules/auth/views/sign_up_view.dart';
 import 'package:get/get.dart';
-
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
 import '../modules/apartmentDetail/bindings/apartment_detail_binding.dart';
@@ -27,8 +28,20 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.AUTH,
-      page: () => const AuthView(),
+      page: () => AuthView(),
       binding: AuthBinding(),
+      children: [
+        GetPage(
+            name: _Paths.FORGOT,
+            page: () =>const ForgotPasswordView(),
+            binding: AuthBinding(),
+        ),
+        GetPage(
+            name: _Paths.SIGNUP,
+            page: () =>const SignUpView(),
+            binding: AuthBinding(),
+        ),
+      ]
     ),
     GetPage(
       name: _Paths.FAVORITE,

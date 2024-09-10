@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.6
   font_awesome_flutter: ^10.7.0
   loading_animation_widget: ^1.2.1
+  country_code_picker: ^3.0.0
 
 dev_dependencies:
   flutter_test:
