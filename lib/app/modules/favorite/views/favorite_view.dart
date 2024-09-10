@@ -13,7 +13,7 @@ class FavoriteView extends GetView<FavoriteController> {
       ),
       body: const Center(
         child: Text(
-          'FavoriteView is working',
+          'you have no saved apartment',
           style: TextStyle(fontSize: 20),
         ),
       ),

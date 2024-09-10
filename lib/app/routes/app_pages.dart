@@ -2,6 +2,9 @@ import 'package:get/get.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
+import '../modules/apartmentDetail/bindings/apartment_detail_binding.dart';
+import '../modules/apartmentDetail/views/apartment_detail_view.dart';
+import '../modules/apartmentDetail/views/over_view_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/favorite/bindings/favorite_binding.dart';
@@ -19,7 +22,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () =>HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -36,6 +39,18 @@ class AppPages {
       name: _Paths.ACCOUNT,
       page: () => const AccountView(),
       binding: AccountBinding(),
+    ),
+    GetPage(
+      name: _Paths.APARTMENT_DETAIL,
+      page: () => const ApartmentDetailView(),
+      binding: ApartmentDetailBinding(),
+      children: [
+        GetPage(
+          name: _Paths.OVERVIEW_APARTMENT,
+          page: () => const OverViewView(),
+          binding: AccountBinding(),
+        ),
+      ]
     ),
   ];
 }
