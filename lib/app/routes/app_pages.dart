@@ -33,12 +33,12 @@ class AppPages {
       children: [
         GetPage(
             name: _Paths.FORGOT,
-            page: () =>const ForgotPasswordView(),
+            page: () => ForgotPasswordView(),
             binding: AuthBinding(),
         ),
         GetPage(
             name: _Paths.SIGNUP,
-            page: () =>const SignUpView(),
+            page: () => SignUpView(),
             binding: AuthBinding(),
         ),
       ]
