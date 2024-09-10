@@ -1,4 +1,6 @@
+import 'package:beit_rent/app/data/models/property.dart';
 import 'package:beit_rent/app/routes/app_pages.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -7,7 +9,8 @@ import '../../../constants/colorConstant.dart';
 import '../controllers/apartment_detail_controller.dart';
 
 class ApartmentDetailView extends GetView<ApartmentDetailController> {
-  const ApartmentDetailView({super.key});
+   ApartmentDetailView({super.key});
+ final Property property=Get.arguments;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,13 +43,13 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                           padding: const EdgeInsets.all(10),
                           child: Stack(
                             children: [
-                              Container(
-                                width: Get.width,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    image: const DecorationImage(
-                                        image: AssetImage("assets/images/appartment_pic.png"),
-                                        fit: BoxFit.fill)),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: CachedNetworkImage(imageUrl:property.image![0].toString(),
+                                  placeholder: (context, url) => Image.asset("assets/images/placeholder.png"),
+                                  errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
+                                  fit: BoxFit.cover,width: Get.width,
+                                ),
                               ),
                               Container(
                                 width: Get.width,
@@ -65,54 +68,65 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                child: ListTile(
-                                  title: const Text("Luxury Addis Apartment ",style: TextStyle(fontSize: 20),),
-                                  subtitle: Row(
+                                child:Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const FaIcon(
-                                        FontAwesomeIcons.locationDot,
-                                        color: Colors.grey,
-                                        size: 18,
-                                      ),
-                                      const SizedBox(
-                                        width: 6,
-                                      ),
-                                      Text(
-                                        "4kilo unity park,zewditu st,addis ababa ethiopia",
-                                        maxLines: 2,
-                                        style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                                      Text(property.name!,style:const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.w500),),
+                                      const SizedBox(height:6,),
+                                      Row(
+                                        children: [
+                                          const FaIcon(
+                                            FontAwesomeIcons.locationDot,
+                                            color: Colors.grey,
+                                            size: 18,
+                                          ),
+                                          const SizedBox(
+                                            width: 6,
+                                          ),
+                                          Expanded(
+                                            child: Text(property.absoluteLocation!.address!,
+                                              overflow: TextOverflow.visible,
+                                              textAlign: TextAlign.start,
+                                              softWrap: true,
+                                              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  titleTextStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500),
-                                ),
+                                )
                               )
                             ],
                           ),
                         )),
                   ),
+                  //price and verification state
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Row(
+                         Row(
                           children: [
                             Text(
-                              "40000",
-                              style: TextStyle(
+                              property.price!.toString(),
+                              style:const TextStyle(
                                   fontSize: 25,
                                   fontWeight:
                                   FontWeight.bold),
                             ),
-                            SizedBox(width: 10),
-                            Text("ETB per 1 day"),
+                            const SizedBox(width: 10),
+                            const Text("ETB per 1 day"),
                           ],
                         ),
-                        Container(
+                         property.verification!.status=="Verified"? Container(
                           padding: const EdgeInsets.only(
                               left: 15, right: 15, top: 5, bottom: 5),
                           decoration: BoxDecoration(
@@ -136,18 +150,19 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                               )
                             ],
                           ),
-                        )
+                        ):const SizedBox()
                       ],
                     ),
                   ),
                   const Divider(thickness: 1,),
+                  //description
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("Description",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("find  charming bedroom in our apartment ",style: TextStyle(),),
+                   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(property.description.toString(),style:const TextStyle(),),
                   ),
                    //overview
                    Padding(
@@ -157,37 +172,66 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                       children: [
                         const Text("Overview",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                         GestureDetector(
-                          onTap: () => Get.toNamed(Routes.OVERVIEW_APARTMENT),
+                          onTap: () => Get.toNamed(Routes.OVERVIEW_APARTMENT,arguments:property.featuresWithImage),
                             child: const Text("See more",style: TextStyle(color: ColorConstant.primaryColor),))
                       ],
                     ),
                   ),
                    SizedBox(width: Get.width,
-                  height: 110,
+                    height: 110,
                     child: ListView.builder(
                       padding:const EdgeInsets.all(9),
-                      itemCount: 6,
+                      itemCount:property.featuresWithImage!.length ,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) => Container(
                         margin:const EdgeInsets.only(right: 10),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                              child: Image.asset("assets/images/appartment_pic.png",width: 110,fit: BoxFit.fill,))),),
+                              child:CachedNetworkImage(imageUrl:property.featuresWithImage![index].image!.first,
+                                placeholder: (context, url) => Image.asset("assets/images/placeholder.png",width: 100,height: 110,),
+                                errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
+                                fit: BoxFit.fill,
+                                width: 100,
+                              ),)
+                      ),),
                   ),
+                  //facilities
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("Facilities",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
+                   Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment:MainAxisAlignment.start,
                       children: [
-                        Row(children: [FaIcon(FontAwesomeIcons.bed,color: Colors.grey,),Text("3 Bed Rooms",style: TextStyle(fontSize: 15),)],),
-                        SizedBox(width:25,),
-                        Row(children: [FaIcon(FontAwesomeIcons.bed,color: Colors.grey,),Text("3 Bed Rooms",style: TextStyle(fontSize: 15),)],),
+                        Row(children: [const FaIcon(FontAwesomeIcons.bed,color: Colors.grey,),const SizedBox(width: 10,), Text("${property.bedRoom!.count} Bed Rooms",style:const TextStyle(fontSize: 15),)],),
+                        const SizedBox(width:25,),
+                        Row(children: [const FaIcon(FontAwesomeIcons.bath,color: Colors.grey,),const SizedBox(width: 10,),Text("${property.bathRoom!.count} Bath Rooms",style: TextStyle(fontSize: 15),)],),
                       ],
                     ),
+                  ),
+                  //features
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Features",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Wrap(
+                      children:List.generate(property.features!.length,(index) =>Row(children: [const FaIcon(FontAwesomeIcons.solidCircleCheck,size: 14,color: Colors.grey,),const SizedBox(width: 10,), Text("${property.features![index]} Bed Rooms",style:const TextStyle(fontSize: 15),)],),
+                          )
+                    ),
+                  ),
+                  //contact
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Contact",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(children: [const FaIcon(FontAwesomeIcons.phone,color: Colors.grey,),const SizedBox(width: 10,), Text("${property.owner!.phoneNumber}",style:const TextStyle(fontSize: 15),)],),
+
                   ),
                   //review
                   Padding(
@@ -195,18 +239,17 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                        "Rating (1 Reviewers)",
-                        style: TextStyle(
+                         Text(
+                        "Rating (${property.review!.length} Reviewers)",
+                        style:const TextStyle(
                             fontSize: 20,
                             fontWeight:
                             FontWeight.bold),
                       ),
                         Row(
                           children: [
-                            Row(children:List.generate(5,(index) => const FaIcon(FontAwesomeIcons.solidStar,color: ColorConstant.primaryColor,size: 16,),),),
-                            const Text("(5.0)",style: TextStyle(color: ColorConstant.primaryColor),)
-
+                            Row(children:List.generate(property.averageRating!.toInt(),(index) => const FaIcon(FontAwesomeIcons.solidStar,color: ColorConstant.primaryColor,size: 16,),),),
+                            Text("(${property.averageRating!.toPrecision(1)})",style:const TextStyle(color: ColorConstant.primaryColor),)
                           ]
                         ),
                       ],

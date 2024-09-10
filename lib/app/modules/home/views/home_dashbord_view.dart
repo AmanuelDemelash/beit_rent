@@ -1,11 +1,14 @@
 import 'package:beit_rent/app/constants/colorConstant.dart';
+import 'package:beit_rent/app/data/models/property.dart';
 import 'package:beit_rent/app/modules/home/controllers/home_controller.dart';
 import 'package:beit_rent/app/routes/app_pages.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../widgets/appBarTitle.dart';
 import '../widgets/headerTextSpan.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class HomeDashBordView extends GetView<HomeController> {
   HomeDashBordView({super.key});
@@ -107,134 +110,66 @@ class HomeDashBordView extends GetView<HomeController> {
               ),
               // apartment list
               Expanded(
-                  child: Obx(() => !controller.viewModeList.value
+                  child: Obx(() =>controller.isLoadingAllProperty.value? Center(
+                    child:
+                    LoadingAnimationWidget.fourRotatingDots(
+                      color: ColorConstant.primaryColor,
+                      size:40,
+                    ),
+                  ):
+                  !controller.viewModeList.value
                       ? SizedBox(
                           width: Get.width,
                           height: Get.height,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                //horizontal list
-                                SizedBox(
-                                  height: 260,
-                                  width: Get.width,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) =>
-                                          const ApartmentHorizontalCard()),
-                                ),
-                                //vertical list
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 14, bottom: 14),
-                                  child: Text(
-                                    "Season Top",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                          child: RefreshIndicator(
+                            onRefresh: () => controller.getAllProperty(),
+                            color: ColorConstant.primaryColor,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //horizontal list
+                                  SizedBox(
+                                    height: 260,
+                                    width: Get.width,
+                                    child: ListView.builder(
+                                        itemCount: controller.allProperty.value.length,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) =>
+                                             GestureDetector(
+                                               onTap: () => Get.toNamed(Routes.APARTMENT_DETAIL,arguments: controller.allProperty.value[index]),
+                                                 child: ApartmentHorizontalCard(property:controller.allProperty.value[index]))),
                                   ),
-                                ),
-                                ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: 15,
-                                  itemBuilder: (context, index) =>
-                                      const ApartmentVerticalCard(),
-                                ),
-                              ],
+                                  //vertical list
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 14, bottom: 14),
+                                    child: Text(
+                                      "Season Top",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  ListView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount:controller.allProperty.value.length,
+                                    itemBuilder: (context, index) =>
+                                        GestureDetector(
+                                          onTap: () => Get.toNamed(Routes.APARTMENT_DETAIL,arguments: controller.allProperty.value[index]),
+                                            child: ApartmentVerticalCard(property: controller.allProperty.value[index],)),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         )
                       : ListView.builder(
-                          itemCount: 10,
+                          itemCount:controller.allProperty.value.length,
                           itemBuilder: (context, index) => InkWell(
-                            onTap: () => Get.toNamed(Routes.APARTMENT_DETAIL),
-                            child: Card(
-                                elevation: 0,
-                                color: Colors.white,
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: SizedBox(
-                                        width: Get.width,
-                                        child: Image.asset(
-                                          "assets/images/appartment_pic.png",
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                    const ListTile(
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Luxury Addis Apartments",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Row(children: [
-                                            FaIcon(
-                                              FontAwesomeIcons.solidStar,
-                                              color: ColorConstant.primaryColor,
-                                              size: 16,
-                                            ),
-                                            Text("5.0"),
-                                            Text("(1)")
-                                          ])
-                                        ],
-                                      ),
-                                      subtitle: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                              "find charming bedroom in our apartment"),
-                                          SizedBox(
-                                            height: 8,
-                                          ),
-                                          Row(
-                                            children: [
-                                              FaIcon(
-                                                FontAwesomeIcons.locationDot,
-                                                color: Colors.grey,
-                                                size: 18,
-                                              ),
-                                              SizedBox(
-                                                width: 6,
-                                              ),
-                                              Text(
-                                                "4kilo unity park,zewditu st,addis ababa ethiopia",
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 3,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "40000",
-                                                style: TextStyle(
-                                                    fontSize: 25,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(width: 10),
-                                              Text("ETB per 1 day")
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )),
+                            onTap: () => Get.toNamed(Routes.APARTMENT_DETAIL,arguments: controller.allProperty.value[index]),
+                            child: ApartmentListView(property: controller.allProperty.value[index],),
                           ),
                         )))
             ],
@@ -243,16 +178,115 @@ class HomeDashBordView extends GetView<HomeController> {
   }
 }
 
+class ApartmentListView extends StatelessWidget {
+  const ApartmentListView({
+    super.key,
+    required this.property
+  });
+  final Property property;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        elevation: 0,
+        color: Colors.white,
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: CachedNetworkImage(imageUrl:property.image![0].toString(),
+                placeholder: (context, url) => Image.asset("assets/images/placeholder.png"),
+                errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
+                fit: BoxFit.fill,width: Get.width,
+                height: 300,
+              ),
+            ),
+             ListTile(
+              title: Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    property.name!,
+                    style:const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Row(children: [
+                    const FaIcon(
+                      FontAwesomeIcons.solidStar,
+                      color: ColorConstant.primaryColor,
+                      size: 16,
+                    ),
+                    Text("${property.averageRating!.toPrecision(1)}"),
+                    Text("(${property.review!.length})")
+                  ])
+                ],
+              ),
+              subtitle: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  Text(property.description!,maxLines: 1,),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      const FaIcon(
+                        FontAwesomeIcons.locationDot,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Expanded(
+                        child: Text(
+                          property.absoluteLocation!.address!,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          softWrap: true,
+                          style: const TextStyle(
+                              color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        property.price.toString(),
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight:
+                                FontWeight.bold),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text("ETB per 1 day")
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+}
+
 class ApartmentVerticalCard extends StatelessWidget {
   const ApartmentVerticalCard({
     super.key,
+    required this.property
   });
-
+  final Property property;
   @override
   Widget build(BuildContext context) {
     return Card(
       color: Colors.white,
-      elevation: 0.7,
+      elevation: 0,
       child: Container(
         width: Get.width,
         padding: const EdgeInsets.all(4),
@@ -260,57 +294,84 @@ class ApartmentVerticalCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListTile(
-              leading: Image.asset(
-                "assets/images/appartment_pic.png",
-                width: 90,
-                height: 90,
-                fit: BoxFit.fill,
-              ),
-              trailing: const FaIcon(
-                FontAwesomeIcons.heart,
-                color: ColorConstant.primaryColor,
-              ),
-              title: const Text(
-                "Luxury addis apartment",
-                style: TextStyle(fontSize: 21),
-              ),
-              subtitle: const Column(
-                children: [
-                  Row(
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.locationDot,
-                        size: 15,
-                        color: Colors.grey,
-                      ),
-                      Text(
-                        "Meskel flower, addis ababa",
-                        style: TextStyle(color: Colors.grey),
-                      )
-                    ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "4000 ETB",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text("per 1 day")
-                    ],
+                  width: 90,
+                  height: 90,
+                  child:
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child:CachedNetworkImage(imageUrl:property.image![0].toString(),
+                      placeholder: (context, url) => Image.asset("assets/images/placeholder.png"),
+                      errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
+                      fit: BoxFit.cover,width:90,height: 90,
+                    ),
                   ),
-                  Row(
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.bed,
-                        color: Colors.grey,
-                      ),
-                      Text("1 Bed Room")
-                    ],
-                  )
-                ],
-              ),
+                ),
+                 Expanded(
+                  child: ListTile(
+                    trailing:const FaIcon(
+                      FontAwesomeIcons.heart,
+                      color: ColorConstant.primaryColor,
+                    ),
+                    title: Text(
+                      property.name!,
+                      style:const TextStyle(fontSize:18),
+                    ),
+                    subtitle: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.locationDot,
+                              size: 15,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(width: 3,),
+                            Expanded(
+                              child: Text(
+                                property.absoluteLocation!.address!,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 5,),
+                        Row(
+                          children: [
+                            Text(
+                              "${property.price} ETB",
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const Text(" per 1 day")
+                          ],
+                        ),
+                        const SizedBox(height: 5,),
+                        Row(
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.bed,size: 17,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(width:3,),
+                            Text("${property.bedRoom!.count} Bed Room")
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -319,7 +380,7 @@ class ApartmentVerticalCard extends StatelessWidget {
                   children: [
                     Row(
                       children: List.generate(
-                        5,
+                        property.averageRating!.toInt(),
                         (index) => const Padding(
                           padding: EdgeInsets.all(1),
                           child: FaIcon(
@@ -330,16 +391,16 @@ class ApartmentVerticalCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Text(
-                      "(5.0)",
-                      style: TextStyle(
+                     Text(
+                      "(${property.averageRating!.toPrecision(1)})",
+                      style:const TextStyle(
                           color: ColorConstant.primaryColor,
                           fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
-                const Text("1 Reviews"),
-                Container(
+                Text("${property.review!.length} Reviews"),
+                property.verification!.status=="Verified"?Container(
                   padding: const EdgeInsets.only(
                       left: 15, right: 15, top: 5, bottom: 5),
                   decoration: BoxDecoration(
@@ -348,22 +409,23 @@ class ApartmentVerticalCard extends StatelessWidget {
                       color: ColorConstant.primaryColor, // Border color
                       width: 1.0, // Border width
                     ),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   child: const Row(
                     children: [
                       FaIcon(
                         FontAwesomeIcons.certificate,
-                        size: 15,
+                        size: 14,
                         color: ColorConstant.primaryColor,
                       ),
+                      SizedBox(width: 10,),
                       Text(
                         "Verified",
                         style: TextStyle(color: ColorConstant.primaryColor),
                       )
                     ],
                   ),
-                )
+                ):const SizedBox()
               ],
             )
           ],
@@ -374,27 +436,28 @@ class ApartmentVerticalCard extends StatelessWidget {
 }
 
 class ApartmentHorizontalCard extends StatelessWidget {
-  const ApartmentHorizontalCard({
+   const ApartmentHorizontalCard({
     super.key,
+    required this.property
   });
-
+ final Property property;
   @override
   Widget build(BuildContext context) {
     return
       Card(
-        elevation: 0.5,
+        elevation: 0.2,
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Stack(
             children: [
-              Container(
-                width: Get.width - 60,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: const DecorationImage(
-                        image: AssetImage("assets/images/appartment_pic.png"),
-                        fit: BoxFit.fill)),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: CachedNetworkImage(imageUrl:property.image![0].toString(),
+                  placeholder: (context, url) => Image.asset("assets/images/placeholder.png"),
+                  errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
+                    fit: BoxFit.cover,width: Get.width - 60,
+                  ),
               ),
               Container(
                 width: Get.width - 60,
@@ -413,30 +476,41 @@ class ApartmentHorizontalCard extends StatelessWidget {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: ListTile(
-                  title: const Text("Apartment name"),
-                  subtitle: Row(
+                child:Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const FaIcon(
-                        FontAwesomeIcons.locationDot,
-                        color: Colors.grey,
-                        size: 18,
-                      ),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      Text(
-                        "4kilo unity park,zewditu st,addis ababa ethiopia",
-                        maxLines: 2,
-                        style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                       Text(property.name!,style:const TextStyle(
+                          color: Colors.white,
+                          fontSize: 23,
+                          fontWeight: FontWeight.w500),),
+                      const SizedBox(height:6,),
+                      Row(
+                        children: [
+                          const FaIcon(
+                            FontAwesomeIcons.locationDot,
+                            color: Colors.grey,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Expanded(
+                            child: Text(property.absoluteLocation!.address!,
+                              overflow: TextOverflow.visible,
+                              textAlign: TextAlign.start,
+                              softWrap: true,
+                              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  titleTextStyle: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
-                ),
+                )
+
               )
             ],
           ),
