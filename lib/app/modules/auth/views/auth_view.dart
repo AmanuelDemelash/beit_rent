@@ -29,7 +29,7 @@ class AuthView extends GetView<AuthController> {
           height: Get.height,
           padding: const EdgeInsets.all(20),
           child: ListView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             children: [
               const Text("Language",textAlign: TextAlign.right,style: TextStyle(color: ColorConstant.primaryColor,fontWeight: FontWeight.bold,fontSize: 17),),
               Container(
@@ -48,7 +48,7 @@ class AuthView extends GetView<AuthController> {
                     Text("Phone number",style: titleStyle(),),
                     formGap(),
                     TextFormField(
-                      controller: _passwordController,
+                      controller: _phoneController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       autocorrect: true,
                       keyboardType: TextInputType.number,
