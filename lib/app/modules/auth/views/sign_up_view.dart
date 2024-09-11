@@ -3,6 +3,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../utils/validation.dart';
 
 class SignUpView extends GetView<AuthController> {
@@ -13,6 +14,8 @@ class SignUpView extends GetView<AuthController> {
    final TextEditingController _phoneController=TextEditingController();
    final TextEditingController _nameController=TextEditingController();
    final TextEditingController _emailController=TextEditingController();
+   final TextEditingController _passwordController=TextEditingController();
+   final TextEditingController _confirmPasswordController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,6 +160,7 @@ class SignUpView extends GetView<AuthController> {
                     const Text("Password",style: TextStyle(fontSize:17,fontWeight: FontWeight.bold)),
                     const SizedBox(height: 10,),
                     Obx(() =>TextFormField(
+                      controller: _passwordController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       autocorrect: true,
                       keyboardType: TextInputType.text,
@@ -164,7 +168,7 @@ class SignUpView extends GetView<AuthController> {
                       validator: (value) {
                         if(Validation.validatePassword(value!)){
                         }else{
-                          return "invalid phone number";
+                          return "invalid password number";
                         }
                         return null;
                       },
@@ -184,6 +188,7 @@ class SignUpView extends GetView<AuthController> {
                     const Text("Password",style: TextStyle(fontSize:17,fontWeight: FontWeight.bold)),
                     const SizedBox(height: 10,),
                     Obx(() =>TextFormField(
+                      controller: _confirmPasswordController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       autocorrect: true,
                       keyboardType: TextInputType.text,
@@ -191,7 +196,7 @@ class SignUpView extends GetView<AuthController> {
                       validator: (value) {
                         if(Validation.validatePassword(value!)){
                         }else{
-                          return "invalid phone number";
+                          return "invalid password number";
                         }
                         return null;
                       },
@@ -211,15 +216,30 @@ class SignUpView extends GetView<AuthController> {
                     Container(
                       margin: const EdgeInsets.only(top: 30,bottom:20),
                       width: Get.width,
-                      child: ElevatedButton(onPressed: () {
-                        _formKey.currentState!.save();
-                        if(_formKey.currentState!.validate()){
+                      child:Obx(() => ElevatedButton(onPressed: () {
+                        _formKeyPassword.currentState!.save();
+                        if(_formKeyPassword.currentState!.validate()){
+                          if(_passwordController.text!=_confirmPasswordController.text){
+                            Get.rawSnackbar(message: "password dosnt match",backgroundColor: Colors.redAccent);
+                          }else{
+                            controller.registerCustomer({
+                              "firstName":_nameController.text,
+                              "lastName":_nameController.text,
+                              "email":_emailController.text,
+                              "phoneNumber":_phoneController.text,
+                              "password":_passwordController.text
+                            }
+                            );
+                          }
                         }
                       },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(15),
                           ),
-                          child: const Text("Submit",style: TextStyle(color: Colors.white),)),
+                          child:controller.isSignUp.value?LoadingAnimationWidget.fourRotatingDots(
+                            color: Colors.white,
+                            size:30,
+                          ): const Text("Submit",style: TextStyle(color: Colors.white),)),)
                     )
                   ],
                 ))

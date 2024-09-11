@@ -5,12 +5,16 @@ abstract class Routes {
   Routes._();
   static const HOME = _Paths.HOME;
   static const AUTH = _Paths.AUTH;
-  static const SIGNUP =_Paths.AUTH + _Paths.SIGNUP;
+  static const SIGNUP = _Paths.AUTH + _Paths.SIGNUP;
   static const FORGOT = _Paths.AUTH + _Paths.FORGOT;
   static const FAVORITE = _Paths.FAVORITE;
   static const ACCOUNT = _Paths.ACCOUNT;
   static const APARTMENT_DETAIL = _Paths.APARTMENT_DETAIL;
-  static const OVERVIEW_APARTMENT = _Paths.APARTMENT_DETAIL + _Paths.OVERVIEW_APARTMENT  ;
+  static const OVERVIEW_APARTMENT =
+      _Paths.APARTMENT_DETAIL + _Paths.OVERVIEW_APARTMENT;
+  static const SPLASH = _Paths.SPLASH;
+  static const BOOKING = _Paths.BOOKING;
+  static const NOTIFICATION = _Paths.NOTIFICATION;
 }
 
 abstract class _Paths {
@@ -23,4 +27,7 @@ abstract class _Paths {
   static const ACCOUNT = '/account';
   static const APARTMENT_DETAIL = '/apartment-detail';
   static const OVERVIEW_APARTMENT = '/apartment-overview';
+  static const SPLASH = '/splash';
+  static const BOOKING = '/booking';
+  static const NOTIFICATION = '/notification';
 }
