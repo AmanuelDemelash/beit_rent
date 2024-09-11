@@ -12,9 +12,15 @@ class FavoriteView extends GetView<FavoriteController> {
         centerTitle: true,
       ),
       body: const Center(
-        child: Text(
-          'you have no saved apartment',
-          style: TextStyle(fontSize: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Noting Found',
+              style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+            ),
+            Text('you have no saved apartment',
+            ),
+          ],
         ),
       ),
     );

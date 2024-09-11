@@ -5,6 +5,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {
@@ -16,6 +17,7 @@ class AuthView extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() =>AuthController());
     return Scaffold(
         body: SafeArea(
       child: Stack(children: [
@@ -76,6 +78,7 @@ class AuthView extends GetView<AuthController> {
                     Text("Password",style: titleStyle(),),
                     formGap(),
                     Obx(() =>TextFormField(
+                      controller: _passwordController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       autocorrect: true,
                       keyboardType: TextInputType.text,
@@ -83,7 +86,7 @@ class AuthView extends GetView<AuthController> {
                       validator: (value) {
                         if(Validation.validatePassword(value!)){
                         }else{
-                          return "invalid phone number";
+                          return "invalid password number";
                         }
                         return null;
                       },
@@ -119,15 +122,27 @@ class AuthView extends GetView<AuthController> {
                     Container(
                       margin: const EdgeInsets.only(top: 30,bottom:20),
                       width: Get.width,
-                      child: ElevatedButton(onPressed: () {},
+                      child:Obx(() =>ElevatedButton(onPressed: () {
+                        _formKey.currentState!.save();
+                        if(_formKey.currentState!.validate()){
+                          controller.customerLogin({
+                            "phoneNumber":_phoneController.text,
+                            "password":_passwordController.text
+                          });
+                        }
+                      },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(15)
                           ),
-                          child: const Text("Login In",style: TextStyle(color: Colors.white),)),
-                    )
+                          child:controller.isLoginLoading.value?LoadingAnimationWidget.fourRotatingDots(
+                            color: Colors.white,
+                            size:30,
+                          ):
+                          const Text("Login In",style: TextStyle(color: Colors.white),)),
+                    ))
                   ],
                 )),),
-               Center(
+              Center(
                 child: GestureDetector(
                   onTap: () => Get.toNamed(Routes.SIGNUP),
                   child: const Text.rich(TextSpan(children: [

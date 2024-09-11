@@ -1,3 +1,5 @@
+import 'package:beit_rent/app/controllers/global_controller.dart';
+import 'package:beit_rent/app/modules/auth/views/auth_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -14,7 +16,7 @@ class AccountView extends GetView<AccountController> {
       ),
       body:Padding(
         padding: const EdgeInsets.all(15),
-        child: Column(
+        child: Obx(() =>!Get.find<GlobalController>().isLogIn.value?AuthView():Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -89,8 +91,8 @@ class AccountView extends GetView<AccountController> {
               )
             ),
           ],
-        ),
+        )
       )
-    );
+    ));
   }
 }

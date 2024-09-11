@@ -1,4 +1,5 @@
 import 'package:beit_rent/app/constants/colorConstant.dart';
+import 'package:beit_rent/app/controllers/global_controller.dart';
 import 'package:beit_rent/app/data/models/property.dart';
 import 'package:beit_rent/app/modules/home/controllers/home_controller.dart';
 import 'package:beit_rent/app/routes/app_pages.dart';
@@ -7,20 +8,33 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../widgets/appBarTitle.dart';
-import '../widgets/headerTextSpan.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class HomeDashBordView extends GetView<HomeController> {
   HomeDashBordView({super.key});
-
   final TextEditingController searchTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const AppBarTitle(),
           actions: [
-            ElevatedButton(
+           Get.find<GlobalController>().isLogIn.value?Row(
+             children: [
+               ElevatedButton(
+                   onPressed: (){},
+                   child: const Text(
+                     "Become a Host",
+                     style: TextStyle(color: Colors.white),
+                   )),
+               const SizedBox(width:10,),
+               GestureDetector(
+                 onTap: () => Get.toNamed(Routes.NOTIFICATION),
+                   child: const FaIcon(FontAwesomeIcons.solidBell))
+             ],
+           )
+           :ElevatedButton(
                 onPressed: () => Get.toNamed(Routes.AUTH),
                 child: const Text(
                   "Login",
@@ -37,7 +51,12 @@ class HomeDashBordView extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const HeaderTextSpan(),
+              Text.rich(TextSpan(children: [
+                TextSpan(text: 'Hi,${controller.user.values}', style:const TextStyle(fontSize: 17)),
+                const TextSpan(
+                    text: '\nDiscover your dream house',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22))
+              ])),
               // search section
               Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 10),
@@ -111,8 +130,7 @@ class HomeDashBordView extends GetView<HomeController> {
               // apartment list
               Expanded(
                   child: Obx(() =>controller.isLoadingAllProperty.value? Center(
-                    child:
-                    LoadingAnimationWidget.fourRotatingDots(
+                    child:LoadingAnimationWidget.fourRotatingDots(
                       color: ColorConstant.primaryColor,
                       size:40,
                     ),
@@ -121,7 +139,8 @@ class HomeDashBordView extends GetView<HomeController> {
                       ? SizedBox(
                           width: Get.width,
                           height: Get.height,
-                          child: RefreshIndicator(
+                          child:
+                          RefreshIndicator(
                             onRefresh: () => controller.getAllProperty(),
                             color: ColorConstant.primaryColor,
                             child: SingleChildScrollView(
