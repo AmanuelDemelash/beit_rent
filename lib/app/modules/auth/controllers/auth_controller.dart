@@ -25,7 +25,6 @@ class AuthController extends GetxController {
       if(result.statusCode==200){
        await prefs.setString('token', result.body['data']["token"]);
         await prefs.setString('id', result.body['data']["customer"]['_id']);
-       Get.find<GlobalController>().user.value=result.body['data']['customer'];
        Get.find<GlobalController>().getToken();
         isLoginLoading.value=false;
       Get.offAllNamed(Routes.HOME);
@@ -47,7 +46,6 @@ class AuthController extends GetxController {
        if(result.statusCode==201){
          await prefs.setString('token', result.body['data']["token"]);
          await prefs.setString('id', result.body['data']["newCustomer"]['_id']);
-         Get.find<GlobalController>().user.value=result.body['data']['newCustomer'];
          Get.find<GlobalController>().getToken();
          isSignUp.value=false;
          Get.offAllNamed(Routes.HOME);

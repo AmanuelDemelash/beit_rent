@@ -172,7 +172,7 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                       children: [
                         const Text("Overview",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                         GestureDetector(
-                          onTap: () => Get.toNamed(Routes.OVERVIEW_APARTMENT,arguments:property.featuresWithImage),
+                          onTap: () => Get.toNamed(Routes.OVERVIEW_APARTMENT,arguments:property.image),
                             child: const Text("See more",style: TextStyle(color: ColorConstant.primaryColor),))
                       ],
                     ),
@@ -181,13 +181,13 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                     height: 110,
                     child: ListView.builder(
                       padding:const EdgeInsets.all(9),
-                      itemCount:property.featuresWithImage!.length ,
+                      itemCount:property.image!.length ,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) => Container(
                         margin:const EdgeInsets.only(right: 10),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                              child:CachedNetworkImage(imageUrl:property.featuresWithImage![index].image!.first,
+                              child:CachedNetworkImage(imageUrl:property.image![index],
                                 placeholder: (context, url) => Image.asset("assets/images/placeholder.png",width: 100,height: 110,),
                                 errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
                                 fit: BoxFit.fill,
@@ -301,7 +301,7 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
           Container(
             width: Get.width,
             padding: const EdgeInsets.all(15),
-            child: ElevatedButton(onPressed: () {},
+            child: ElevatedButton(onPressed:() =>Get.toNamed(Routes.APARTMENT_BOOK,arguments: property) ,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(20)
                 ),

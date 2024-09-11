@@ -42,9 +42,31 @@ class ApiProvider extends GetConnect{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     try {
-      final response = await get("${ApiConstants.customerUrl}/{$id}",
+      final response = await get("${ApiConstants.customerUrl}/$id",
           headers: {'Authorization': 'Bearer $token'}
       );
+      return response;
+    } catch (e) {
+      return const Response(statusCode: 501, statusText: "error");
+    }
+  }
+
+  // booking
+  Future<Response?> getCustomerBooking() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    try {
+      final response = await get(ApiConstants.myBookingUrl,
+          headers: {'Authorization': 'Bearer $token'}
+      );
+      return response;
+    } catch (e) {
+      return const Response(statusCode: 501, statusText: "error");
+    }
+  }
+  Future<Response> booking(Map<String, dynamic> data) async {
+    try {
+      final response = await post(ApiConstants.bookingUrl, data);
       return response;
     } catch (e) {
       return const Response(statusCode: 501, statusText: "error");

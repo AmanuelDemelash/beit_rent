@@ -8,9 +8,10 @@ class HomeController extends GetxController {
   final ApiProvider _apiProvider = Get.find<ApiProvider>();
   Rx<List<Property>> allProperty = RxList<Property>().obs;
   RxInt bottomNavIndex = 0.obs;
+  RxInt carouselIndex = 0.obs;
   RxBool viewModeList=false.obs;
   RxBool isLoadingAllProperty=false.obs;
-  RxMap<String,dynamic> user=RxMap<String,dynamic>();
+  RxString userName="".obs;
 
   @override
   void onInit() {
@@ -41,8 +42,7 @@ class HomeController extends GetxController {
     if(id.isNotEmpty){
       var result= await _apiProvider.getCustomer(id);
       if(result!.statusCode==200){
-        user.value=result.body['data']['newCustomer'];
-        print(user.values);
+        userName.value=result.body['customer']['firstName'];
       }else{
         print(result.body);
       }

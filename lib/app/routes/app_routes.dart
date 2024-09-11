@@ -10,6 +10,7 @@ abstract class Routes {
   static const FAVORITE = _Paths.FAVORITE;
   static const ACCOUNT = _Paths.ACCOUNT;
   static const APARTMENT_DETAIL = _Paths.APARTMENT_DETAIL;
+  static const APARTMENT_BOOK = _Paths.APARTMENT_DETAIL + _Paths.APARTMENT_BOOK;
   static const OVERVIEW_APARTMENT =
       _Paths.APARTMENT_DETAIL + _Paths.OVERVIEW_APARTMENT;
   static const SPLASH = _Paths.SPLASH;
@@ -26,6 +27,7 @@ abstract class _Paths {
   static const FAVORITE = '/favorite';
   static const ACCOUNT = '/account';
   static const APARTMENT_DETAIL = '/apartment-detail';
+  static const APARTMENT_BOOK = '/apartment-book';
   static const OVERVIEW_APARTMENT = '/apartment-overview';
   static const SPLASH = '/splash';
   static const BOOKING = '/booking';
