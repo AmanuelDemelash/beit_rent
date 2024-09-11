@@ -6,6 +6,7 @@ class BookingView extends GetView<BookingController> {
   const BookingView({super.key});
   @override
   Widget build(BuildContext context) {
+    Get.put(BookingController());
     return DefaultTabController(
       length: 3,
       child: Scaffold(

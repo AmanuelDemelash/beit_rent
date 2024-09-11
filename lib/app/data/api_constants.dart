@@ -6,7 +6,7 @@ class ApiConstants{
  static const String propertyUrl = '/api/v1/property';
  static const String bookingUrl = '/api/v1/booking';
  static const String notificationUrl = '/api/v1/notification';
- static const String myBookingUrl = '/my-booking';
+ static const String myBookingUrl = '/api/v1/booking/my-booking';
  static const String loginUrl = '/login';
  static const String tokenLoginUrl = '/loginToken';
  static const String passwordChangeUrl = '/passwordChange';

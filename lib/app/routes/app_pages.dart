@@ -1,3 +1,4 @@
+import 'package:beit_rent/app/modules/apartmentDetail/views/book_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/account/bindings/account_binding.dart';
@@ -67,7 +68,12 @@ class AppPages {
           GetPage(
             name: _Paths.OVERVIEW_APARTMENT,
             page: () => OverViewView(),
-            binding: AccountBinding(),
+            binding: ApartmentDetailBinding(),
+          ),
+          GetPage(
+            name: _Paths.APARTMENT_BOOK,
+            page: () => BookView(),
+            binding: ApartmentDetailBinding(),
           ),
         ]),
     GetPage(

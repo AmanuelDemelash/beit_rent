@@ -4,6 +4,8 @@ import 'package:beit_rent/app/data/models/property.dart';
 import 'package:beit_rent/app/modules/home/controllers/home_controller.dart';
 import 'package:beit_rent/app/routes/app_pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_indicator/carousel_indicator.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -51,12 +53,12 @@ class HomeDashBordView extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text.rich(TextSpan(children: [
-                TextSpan(text: 'Hi,${controller.user.values}', style:const TextStyle(fontSize: 17)),
+              Obx(() =>Text.rich(TextSpan(children: [
+                TextSpan(text: 'Hi, ${controller.userName.value}', style:const TextStyle(fontSize: 17)),
                 const TextSpan(
                     text: '\nDiscover your dream house',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22))
-              ])),
+              ])),),
               // search section
               Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 10),
@@ -77,6 +79,7 @@ class HomeDashBordView extends GetView<HomeController> {
                               )),
                           hintText: "Search",
                           hintStyle: const TextStyle(color: Colors.grey),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide:
@@ -210,25 +213,68 @@ class ApartmentListView extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: CachedNetworkImage(imageUrl:property.image![0].toString(),
-                placeholder: (context, url) => Image.asset("assets/images/placeholder.png"),
-                errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
-                fit: BoxFit.fill,width: Get.width,
-                height: 300,
+            Stack(children: [
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child:CarouselSlider.builder(
+                      carouselController: CarouselSliderController(),
+                      itemCount:property.image!.length,
+                      itemBuilder:(context, index, realIndex) => CachedNetworkImage(imageUrl:property.image![index].toString(),
+                        placeholder: (context, url) => Image.asset("assets/images/placeholder.png"),
+                        errorWidget: (context, url, error) =>const FaIcon(FontAwesomeIcons.image),
+                        fit: BoxFit.cover,width: Get.width,
+                        height: 300,
+                      ),
+                      options: CarouselOptions(
+                        aspectRatio: 16/9,
+                        viewportFraction:1,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: false,
+                        autoPlayInterval: const Duration(seconds: 3),
+                        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enlargeCenterPage: true,
+                        enlargeFactor: 0.3,
+                        scrollDirection: Axis.horizontal,
+                        onPageChanged: (index, reason) =>Get.find<HomeController>().carouselIndex.value=index,
+                      )
+                  )
               ),
-            ),
+              Positioned(
+                bottom:20,
+                  left: 0,
+                  right: 0,
+                  child: SizedBox(
+                    width: Get.width,
+                    child: Center(
+                      child:Obx(() => CarouselIndicator(
+                            count:property.image!.length,
+                             color: Colors.black.withOpacity(0.5),
+                            width: 10,
+                            height: 10,
+                           activeColor: Colors.white,
+                            index: Get.find<HomeController>().carouselIndex.value,
+                          ),)
+                    ),
+                  ),
+                  )
+            ],),
              ListTile(
               title: Row(
                 mainAxisAlignment:
                     MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    property.name!,
-                    style:const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Text(
+                      property.name!,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style:const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   Row(children: [
                     const FaIcon(
