@@ -53,12 +53,18 @@ class HomeDashBordView extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Obx(() =>Text.rich(TextSpan(children: [
-                TextSpan(text: 'Hi, ${controller.userName.value}', style:const TextStyle(fontSize: 17)),
-                const TextSpan(
-                    text: '\nDiscover your dream house',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22))
-              ])),),
+             Obx(() {
+               final customer = controller.customer.value.customer;
+               return Text.rich(TextSpan(children: [
+                 TextSpan(
+                     text: 'Hi, ${customer?.firstName ?? ""} ',
+                     style: const TextStyle(fontSize: 17)),
+                 const TextSpan(
+                     text: '\nDiscover your dream house',
+                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
+               ]));
+              }
+             ),
               // search section
               Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 10),
@@ -86,9 +92,9 @@ class HomeDashBordView extends GetView<HomeController> {
                                   const BorderSide(color: Colors.black))),
                     )),
                     Container(
-                      width: 50,
-                      height: 50,
-                      margin: const EdgeInsets.only(right: 10, left: 10),
+                      width: 45,
+                      height: 45,
+                      margin: const EdgeInsets.only(right:6, left:6),
                       decoration: BoxDecoration(
                           color: Colors.black,
                           shape: BoxShape.rectangle,
@@ -105,8 +111,8 @@ class HomeDashBordView extends GetView<HomeController> {
                       onTap: () => controller.viewModeList.value =
                           !controller.viewModeList.value,
                       child: Container(
-                        width: 50,
-                        height: 50,
+                        width:45,
+                        height: 45,
                         decoration: BoxDecoration(
                             color: Colors.black,
                             shape: BoxShape.rectangle,
@@ -213,7 +219,7 @@ class ApartmentListView extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: [
-            Stack(children: [
+             Stack(children: [
               ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child:CarouselSlider.builder(
@@ -349,9 +355,10 @@ class ApartmentVerticalCard extends StatelessWidget {
   final Property property;
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return
+      Card(
       color: Colors.white,
-      elevation: 0,
+      elevation: 0.1,
       child: Container(
         width: Get.width,
         padding: const EdgeInsets.all(4),

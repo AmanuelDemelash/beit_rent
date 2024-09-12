@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class GlobalController extends GetxController {
 
   RxBool isLogIn=false.obs;
-
   RxMap<String,dynamic> user=RxMap<String,dynamic>();
 
   @override

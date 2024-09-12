@@ -3,12 +3,15 @@ import 'package:beit_rent/app/modules/auth/views/auth_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import '../../../constants/colorConstant.dart';
 import '../controllers/account_controller.dart';
 
 class AccountView extends GetView<AccountController> {
   const AccountView({super.key});
   @override
   Widget build(BuildContext context) {
+    Get.put(AccountController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Account',style: TextStyle(fontWeight: FontWeight.bold),),
@@ -16,7 +19,14 @@ class AccountView extends GetView<AccountController> {
       ),
       body:Padding(
         padding: const EdgeInsets.all(15),
-        child: Obx(() =>!Get.find<GlobalController>().isLogIn.value?AuthView():Column(
+        child: Obx(() =>!Get.find<GlobalController>().isLogIn.value?AuthView():
+        controller.isLoadUser.value?Center(
+          child:LoadingAnimationWidget.fourRotatingDots(
+            color: ColorConstant.primaryColor,
+            size:40,
+          ),
+        ) :
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -27,12 +37,11 @@ class AccountView extends GetView<AccountController> {
                 color: Colors.grey.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10)
               ),
-              child: const ListTile(
-                leading: CircleAvatar(),
-                title: Text("amanuel demelash"),
-                subtitle: Text("amanueldemelash@gmail.com"),
-                trailing: FaIcon(FontAwesomeIcons.pen,size: 17,),
-
+              child: ListTile(
+                leading:const CircleAvatar(),
+                title: Text(controller.customer.value.customer?.firstName??""),
+                subtitle: Text(controller.customer.value.customer?.email??""),
+                trailing:const FaIcon(FontAwesomeIcons.pen,size: 17,),
               ),
             ),
             const Text('General',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
