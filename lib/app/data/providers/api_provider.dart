@@ -73,4 +73,18 @@ class ApiProvider extends GetConnect{
     }
   }
 
+  // notification
+  Future<Response?> getNotification() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    try {
+      final response = await get(ApiConstants.notificationUrl,
+          headers: {'Authorization': 'Bearer $token'}
+      );
+      return response;
+    } catch (e) {
+      return const Response(statusCode: 501, statusText: "error");
+    }
+  }
+
 }

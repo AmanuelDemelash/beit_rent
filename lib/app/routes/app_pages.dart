@@ -1,4 +1,5 @@
 import 'package:beit_rent/app/modules/apartmentDetail/views/book_view.dart';
+import 'package:beit_rent/app/modules/booking/views/booking_detail_view.dart';
 import 'package:beit_rent/app/modules/home/views/filter_view.dart';
 import 'package:get/get.dart';
 
@@ -89,10 +90,16 @@ class AppPages {
       binding: SplashBinding(),
     ),
     GetPage(
-      name: _Paths.BOOKING,
-      page: () => const BookingView(),
-      binding: BookingBinding(),
-    ),
+        name: _Paths.BOOKING,
+        page: () => const BookingView(),
+        binding: BookingBinding(),
+        children: [
+          GetPage(
+            name: _Paths.BOOKING_DETAIL,
+            page: () => BookingDetailView(),
+            binding: BookingBinding(),
+          ),
+        ]),
     GetPage(
       name: _Paths.NOTIFICATION,
       page: () => const NotificationView(),

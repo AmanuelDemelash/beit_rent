@@ -13,95 +13,134 @@ class AccountView extends GetView<AccountController> {
   Widget build(BuildContext context) {
     Get.put(AccountController());
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Account',style: TextStyle(fontWeight: FontWeight.bold),),
-        centerTitle: true,
-      ),
-      body:Padding(
-        padding: const EdgeInsets.all(15),
-        child: Obx(() =>!Get.find<GlobalController>().isLogIn.value?AuthView():
-        controller.isLoadUser.value?Center(
-          child:LoadingAnimationWidget.fourRotatingDots(
-            color: ColorConstant.primaryColor,
-            size:40,
+        appBar: AppBar(
+          title: const Text(
+            'My Account',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-        ) :
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: Get.width,
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: ListTile(
-                leading:const CircleAvatar(),
-                title: Text(controller.customer.value.customer?.firstName??""),
-                subtitle: Text(controller.customer.value.customer?.email??""),
-                trailing:const FaIcon(FontAwesomeIcons.pen,size: 17,),
-              ),
-            ),
-            const Text('General',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-            Container(
-              width: Get.width,
-              margin:const EdgeInsets.only(top: 15,bottom: 10),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child:const Column(
-                children: [
-                  ListTile(
-                    leading:FaIcon(FontAwesomeIcons.language),
-                    title: Text("Change Language"),
-                    trailing: FaIcon(FontAwesomeIcons.arrowRight,size: 17,),
-                  ),
-                  ListTile(
-                    leading:FaIcon(FontAwesomeIcons.lock),
-                    title: Text("Change Password"),
-                    trailing: FaIcon(FontAwesomeIcons.arrowRight,size: 17,),
-                  ),
-                  ListTile(
-                    leading:FaIcon(FontAwesomeIcons.bell),
-                    title: Text("Notification"),
-                    trailing: FaIcon(FontAwesomeIcons.arrowRight,size: 17,),
-                  ),
-
-                ],
-              )
-            ),
-            const Text('Support',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-            Container(
-              width: Get.width,
-              margin:const EdgeInsets.only(top: 15,bottom: 10),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child:const Column(
-                children: [
-                  ListTile(
-                    leading:FaIcon(FontAwesomeIcons.shieldHalved),
-                    title: Text("Privacy Policy"),
-                    trailing: FaIcon(FontAwesomeIcons.arrowRight,size: 17,),
-                  ),
-                  ListTile(
-                    leading:FaIcon(FontAwesomeIcons.info),
-                    title: Text("About"),
-                    trailing: FaIcon(FontAwesomeIcons.arrowRight,size: 17,),
-                  ),
-
-                ],
-              )
-            ),
-          ],
-        )
-      )
-    ));
+          centerTitle: true,
+        ),
+        body: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Obx(() => !Get.find<GlobalController>().isLogIn.value
+                ? AuthView()
+                : controller.isLoadUser.value
+                    ? Center(
+                        child: LoadingAnimationWidget.fourRotatingDots(
+                          color: ColorConstant.primaryColor,
+                          size: 40,
+                        ),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: Get.width,
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ListTile(
+                              leading: const CircleAvatar(),
+                              title: Text(controller
+                                      .customer.value.customer?.firstName ??
+                                  ""),
+                              subtitle: Text(
+                                  controller.customer.value.customer?.email ??
+                                      ""),
+                              trailing: const FaIcon(
+                                FontAwesomeIcons.pen,
+                                size: 17,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            'General',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          Container(
+                              width: Get.width,
+                              margin:
+                                  const EdgeInsets.only(top: 15, bottom: 10),
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const Column(
+                                children: [
+                                  ListTile(
+                                    leading: FaIcon(FontAwesomeIcons.language),
+                                    title: Text("Change Language"),
+                                    trailing: FaIcon(
+                                      FontAwesomeIcons.arrowRight,
+                                      size: 17,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    leading: FaIcon(FontAwesomeIcons.lock),
+                                    title: Text("Change Password"),
+                                    trailing: FaIcon(
+                                      FontAwesomeIcons.arrowRight,
+                                      size: 17,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    leading: FaIcon(FontAwesomeIcons.bell),
+                                    title: Text("Notification"),
+                                    trailing: FaIcon(
+                                      FontAwesomeIcons.arrowRight,
+                                      size: 17,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          const Text(
+                            'Support',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          Container(
+                              width: Get.width,
+                              margin:
+                                  const EdgeInsets.only(top: 15, bottom: 10),
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                children: [
+                                  const ListTile(
+                                    leading:
+                                        FaIcon(FontAwesomeIcons.shieldHalved),
+                                    title: Text("Privacy Policy"),
+                                    trailing: FaIcon(
+                                      FontAwesomeIcons.arrowRight,
+                                      size: 17,
+                                    ),
+                                  ),
+                                  const ListTile(
+                                    leading: FaIcon(FontAwesomeIcons.info),
+                                    title: Text("About"),
+                                    trailing: FaIcon(
+                                      FontAwesomeIcons.arrowRight,
+                                      size: 17,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    onTap: () => controller.logout(),
+                                    leading: const FaIcon(
+                                        FontAwesomeIcons.arrowRightFromBracket),
+                                    title: const Text("LogOut"),
+                                    trailing: const FaIcon(
+                                      FontAwesomeIcons.arrowRight,
+                                      size: 17,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ))));
   }
 }
