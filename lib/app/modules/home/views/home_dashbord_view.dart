@@ -22,29 +22,31 @@ class HomeDashBordView extends GetView<HomeController> {
         appBar: AppBar(
           title: const AppBarTitle(),
           actions: [
-            Get.find<GlobalController>().isLogIn.value
-                ? Row(
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Become a Host",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      GestureDetector(
-                          onTap: () => Get.toNamed(Routes.NOTIFICATION),
-                          child: const FaIcon(FontAwesomeIcons.solidBell))
-                    ],
-                  )
-                : ElevatedButton(
-                    onPressed: () => Get.toNamed(Routes.AUTH),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white),
-                    )),
+            Obx(
+              () => Get.find<GlobalController>().isLogIn.value
+                  ? Row(
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {},
+                            child: const Text(
+                              "Become a Host",
+                              style: TextStyle(color: Colors.white),
+                            )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        GestureDetector(
+                            onTap: () => Get.toNamed(Routes.NOTIFICATION),
+                            child: const FaIcon(FontAwesomeIcons.solidBell))
+                      ],
+                    )
+                  : ElevatedButton(
+                      onPressed: () => Get.toNamed(Routes.AUTH),
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white),
+                      )),
+            ),
             const SizedBox(
               width: 10,
             )
@@ -146,32 +148,38 @@ class HomeDashBordView extends GetView<HomeController> {
                 ),
               ),
               // apartment list
-              Expanded(
-                  child: Obx(() => controller.isLoadingAllProperty.value
-                      ? Center(
-                          child: LoadingAnimationWidget.fourRotatingDots(
-                            color: ColorConstant.primaryColor,
-                            size: 40,
-                          ),
-                        )
-                      : controller.allProperty.value.isEmpty
+              Expanded(child: Obx(() => controller.isLoadingAllProperty.value ||
+                      controller.allProperty.value.isEmpty
                           ? SizedBox(
                               width: Get.width,
                               height: Get.height,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text("Something went wrong"),
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        controller.getAllProperty();
-                                        controller.getCustomer();
-                                      },
-                                      child: const Text(
-                                        "Refresh",
-                                        style: TextStyle(color: Colors.white),
-                                      ))
+                                  const Text("Noting Found",style: TextStyle(fontWeight: FontWeight.bold),),
+                                  const Text("there is noting found on this section"),
+                                 const SizedBox(height: 15,),
+                                 Obx(() => Container(
+                                   width: Get.width,
+                                   padding: const EdgeInsets.only(left: 30,right: 30),
+                                   child: ElevatedButton(
+                                     style: ElevatedButton.styleFrom(
+                                       padding:const EdgeInsets.all(13)
+                                     ),
+                                        onPressed: () {
+                                          controller.getAllProperty();
+                                          controller.getCustomer();
+                                        },
+                                        child:controller.isLoadingAllProperty.value?
+                                        LoadingAnimationWidget.fourRotatingDots(
+                                            color: Colors.white,
+                                            size: 30,
+                                          ) : const Text(
+                                          "Refresh",
+                                          style: TextStyle(color: Colors.white),
+                                        )),
+                                 ))
                                 ],
                               ),
                             )
@@ -287,8 +295,10 @@ class ApartmentListView extends StatelessWidget {
                         itemBuilder: (context, index, realIndex) =>
                             CachedNetworkImage(
                               imageUrl: property.image![index].toString(),
-                              placeholder: (context, url) =>
-                                  Image.asset("assets/images/placeholder.png"),
+                              placeholder: (context, url) => Image.asset(
+                                "assets/images/placeholder.png",
+                                fit: BoxFit.fill,
+                              ),
                               errorWidget: (context, url, error) =>
                                   const FaIcon(FontAwesomeIcons.image),
                               fit: BoxFit.cover,
@@ -331,7 +341,27 @@ class ApartmentListView extends StatelessWidget {
                       ),
                     )),
                   ),
-                )
+                ),
+                 Positioned(
+                    top: 6,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: (){
+                        Get.find<HomeController>().checkFavorite(property
+                            .name!)?Get.find<HomeController>().deleteFavorite(property):
+                        Get.find<HomeController>().addFavorite(property);
+                      },
+                      child:Get.find<HomeController>().checkFavorite(property
+                          .name!) ? const FaIcon(
+                        FontAwesomeIcons.solidHeart,
+                        color: ColorConstant.primaryColor,
+                        size: 30,
+                      ) : const FaIcon(
+                        FontAwesomeIcons.heart,
+                        color: Colors.white,
+                        size:26,
+                      ),
+                    ))
               ],
             ),
             ListTile(
@@ -414,6 +444,7 @@ class ApartmentListView extends StatelessWidget {
 class ApartmentVerticalCard extends StatelessWidget {
   const ApartmentVerticalCard({super.key, required this.property});
   final Property property;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -451,70 +482,85 @@ class ApartmentVerticalCard extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: ListTile(
-                    trailing: const FaIcon(
-                      FontAwesomeIcons.heart,
-                      color: ColorConstant.primaryColor,
-                    ),
-                    title: Text(
-                      property.name!,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    subtitle: Column(
-                      children: [
-                        Row(
-                          children: [
-                            const FaIcon(
-                              FontAwesomeIcons.locationDot,
-                              size: 15,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            Expanded(
-                              child: Text(
-                                property.absoluteLocation!.address!,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.start,
-                                style: const TextStyle(color: Colors.grey),
+                  child: GetBuilder(
+                    init:Get.find<HomeController>(),
+                    builder: (controller) =>ListTile(
+                      trailing: GestureDetector(
+                        onTap: (){
+                          Get.find<HomeController>().checkFavorite(property
+                              .name!)?Get.find<HomeController>().deleteFavorite(property):
+                          Get.find<HomeController>().addFavorite(property);
+                        },
+                        child:Get.find<HomeController>().checkFavorite(property
+                            .name!) ? const FaIcon(
+                          FontAwesomeIcons.solidHeart,
+                          color: ColorConstant.primaryColor,
+                          size: 30,
+                        ) : const FaIcon(
+                          FontAwesomeIcons.heart,
+                          color: ColorConstant.primaryColor,
+                          size: 30,
+                        ),
+                      ),
+                      title: Text(
+                        property.name!,
+                        style: const TextStyle(fontSize: 18
+                        ),
+                      ),
+                      subtitle: Column(
+                        children: [
+                          Row(
+                            children: [
+                              const FaIcon(
+                                FontAwesomeIcons.locationDot,
+                                size: 15,
+                                color: Colors.grey,
                               ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "${property.price} ETB",
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const Text(" per 1 day")
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            const FaIcon(
-                              FontAwesomeIcons.bed,
-                              size: 17,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            Text("${property.bedRoom!.count} Bed Room")
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  property.absoluteLocation!.address!,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "${property.price} ETB",
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              const Text(" per 1 day")
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              const FaIcon(
+                                FontAwesomeIcons.bed,
+                                size: 17,
+                                color: Colors.grey,
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Text("${property.bedRoom!.count} Bed Room")
+                            ],
+                          )
+                        ],
+                      ),
+                    ),))
               ],
             ),
             Row(

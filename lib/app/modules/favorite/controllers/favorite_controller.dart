@@ -1,23 +1,29 @@
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
 class FavoriteController extends GetxController {
-  //TODO: Implement FavoriteController
+  late Box _boxFavorite;
+  RxList<dynamic> allFavorite=RxList<dynamic>();
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    _boxFavorite=Hive.box('favorite');
+    getFavorites();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  Future<void> deleteFavorite(String name)async{
+    _boxFavorite.delete(name);
+    getFavorites();
+  }
+  Future<void> getFavorites()async{
+    allFavorite.clear();
+    var favorites= _boxFavorite.values.toList();
+    allFavorite.addAll(favorites.toList());
+  }
+  Future<void> clearFavorites()async{
+    _boxFavorite.clear();
+    allFavorite.clear();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
