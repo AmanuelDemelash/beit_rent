@@ -1,4 +1,5 @@
 import 'package:beit_rent/app/modules/apartmentDetail/views/book_view.dart';
+import 'package:beit_rent/app/modules/home/views/filter_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/account/bindings/account_binding.dart';
@@ -30,10 +31,16 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
-      page: () => HomeView(),
-      binding: HomeBinding(),
-    ),
+        name: _Paths.HOME,
+        page: () => HomeView(),
+        binding: HomeBinding(),
+        children: [
+          GetPage(
+            name: _Paths.FILTER,
+            page: () => const FilterView(),
+            binding: HomeBinding(),
+          ),
+        ]),
     GetPage(
         name: _Paths.AUTH,
         page: () => AuthView(),

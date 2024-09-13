@@ -10,45 +10,44 @@ class HomeController extends GetxController {
   Rx<List<Property>> allProperty = RxList<Property>().obs;
   RxInt bottomNavIndex = 0.obs;
   RxInt carouselIndex = 0.obs;
-  RxBool viewModeList=false.obs;
-  RxBool isLoadingAllProperty=false.obs;
-  Rx<Customer> customer=Customer().obs;
+  RxBool viewModeList = false.obs;
+  RxBool isLoadingAllProperty = false.obs;
+  Rx<Customer> customer = Customer().obs;
 
+  //filte
+  Rx<RangeValues> rangeValues = RangeValues(500, 20000).obs;
   @override
   void onInit() {
     super.onInit();
     getCustomer();
     getAllProperty();
-
   }
 
-  Future<void> getAllProperty()async{
-    isLoadingAllProperty.value=true;
-    try{
-      var result= await _apiProvider.getAllProperty();
-      if(result!.statusCode==200){
-          allProperty.value.addAll(propertyFromJson(result.bodyString!).toList());
-          isLoadingAllProperty.value=false;
-      }else{
-        isLoadingAllProperty.value=false;
+  Future<void> getAllProperty() async {
+    isLoadingAllProperty.value = true;
+    try {
+      var result = await _apiProvider.getAllProperty();
+      if (result!.statusCode == 200) {
+        allProperty.value.addAll(propertyFromJson(result.bodyString!).toList());
+        isLoadingAllProperty.value = false;
+      } else {
+        isLoadingAllProperty.value = false;
       }
-    }catch(e){
-      isLoadingAllProperty.value=false;
-       Get.rawSnackbar(message: "something went wrong",backgroundColor: Colors.redAccent);
+    } catch (e) {
+      isLoadingAllProperty.value = false;
+      Get.rawSnackbar(
+          message: "something went wrong", backgroundColor: Colors.redAccent);
     }
-
   }
-  Future<void> getCustomer()async{
+
+  Future<void> getCustomer() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('id') ?? "";
-    if(id.isNotEmpty){
-      var result= await _apiProvider.getCustomer(id);
-      if(result!.statusCode==200){
-        customer.value=customerFromJson(result.bodyString!);
-      }else{
-
-      }
+    if (id.isNotEmpty) {
+      var result = await _apiProvider.getCustomer(id);
+      if (result!.statusCode == 200) {
+        customer.value = customerFromJson(result.bodyString!);
+      } else {}
     }
-
   }
 }
