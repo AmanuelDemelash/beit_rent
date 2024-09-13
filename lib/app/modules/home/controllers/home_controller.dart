@@ -16,9 +16,10 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    getAllProperty();
-    getCustomer();
     super.onInit();
+    getCustomer();
+    getAllProperty();
+
   }
 
   Future<void> getAllProperty()async{
@@ -28,6 +29,8 @@ class HomeController extends GetxController {
       if(result!.statusCode==200){
           allProperty.value.addAll(propertyFromJson(result.bodyString!).toList());
           isLoadingAllProperty.value=false;
+      }else{
+        isLoadingAllProperty.value=false;
       }
     }catch(e){
       isLoadingAllProperty.value=false;

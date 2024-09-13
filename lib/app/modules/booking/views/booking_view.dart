@@ -32,11 +32,22 @@ class BookingView extends GetView<BookingController> {
               color: ColorConstant.primaryColor,
               size:40,
             ),
+          ):controller.bookings.value.isEmpty?const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Noting Found',
+                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                ),
+                Text('you have no saved apartment',
+                ),
+              ],
+            ),
           ):
           ListView.builder(
             padding:const EdgeInsets.all(10),
             itemCount: controller.bookings.value.length,
-            itemBuilder: (context, index) =>     Card(
+            itemBuilder: (context, index) => Card(
               color: Colors.white,
               elevation: 0.1,
               child: Container(

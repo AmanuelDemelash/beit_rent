@@ -53,18 +53,19 @@ class HomeDashBordView extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-             Obx(() {
-               final customer = controller.customer.value.customer;
-               return Text.rich(TextSpan(children: [
-                 TextSpan(
-                     text: 'Hi, ${customer?.firstName ?? ""} ',
-                     style: const TextStyle(fontSize: 17)),
-                 const TextSpan(
-                     text: '\nDiscover your dream house',
-                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
-               ]));
-              }
-             ),
+              GetBuilder(
+                init: controller,
+                builder:(controller) {
+                  final customer = controller.customer.value.customer;
+                  return Text.rich(TextSpan(children: [
+                    TextSpan(
+                        text: 'Hi, ${customer?.firstName ?? ""} ',
+                        style: const TextStyle(fontSize: 17)),
+                    const TextSpan(
+                        text: '\nDiscover your dream house',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20))
+                  ]));
+                },),
               // search section
               Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 10),
@@ -143,6 +144,10 @@ class HomeDashBordView extends GetView<HomeController> {
                       color: ColorConstant.primaryColor,
                       size:40,
                     ),
+                  ):controller.allProperty.value.isEmpty? Column(
+                    children: [
+                      ElevatedButton(onPressed: () {}, child:const Text("data"))
+                    ],
                   ):
                   !controller.viewModeList.value
                       ? SizedBox(
