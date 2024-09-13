@@ -34,6 +34,8 @@ class AuthController extends GetxController {
       }
     }catch(e){
       isLoginLoading.value=false;
+      Get.rawSnackbar(title: 'error',message:e.toString(),backgroundColor:Colors.redAccent);
+
     }
   }
 
