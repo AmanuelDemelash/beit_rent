@@ -2,7 +2,6 @@ import 'package:beit_rent/app/constants/colorConstant.dart';
 import 'package:beit_rent/app/modules/home/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:get/get.dart';
 
 class FilterView extends GetView<HomeController> {
@@ -44,12 +43,13 @@ class FilterView extends GetView<HomeController> {
                   ],
                 ),
                 ExpansionTile(
+                  initiallyExpanded: true,
                   title: Row(
                     children: [
-                      Checkbox.adaptive(
-                        value: false,
+                      Obx(() => Checkbox.adaptive(
+                        value:controller.rangeValues.value.end<20000,
                         onChanged: (value) {},
-                      ),
+                      ),),
                       const Text(
                         "Price Range",
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -84,12 +84,13 @@ class FilterView extends GetView<HomeController> {
                   ],
                 ),
                 ExpansionTile(
+                  initiallyExpanded: true,
                   title: Row(
                     children: [
-                      Checkbox.adaptive(
-                        value: false,
+                     Obx(() => Checkbox.adaptive(
+                        value:controller.bedRoomCount.value>0,
                         onChanged: (value) {},
-                      ),
+                      ),),
                       const Text(
                         "BedRoom",
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -107,20 +108,27 @@ class FilterView extends GetView<HomeController> {
                         ),
                         Row(
                           children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Center(
-                                child: FaIcon(
-                                  FontAwesomeIcons.minus,
-                                  color: Colors.white,
+                            GestureDetector(
+                              onTap: () {
+                                if(controller.bedRoomCount.value!=0){
+                                  controller.bedRoomCount.value--;
+                                }
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.minus,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                            Container(
+                            Obx(() =>Container(
                               width: 40,
                               height: 40,
                               margin:
@@ -130,18 +138,21 @@ class FilterView extends GetView<HomeController> {
                                   border:
                                       Border.all(color: Colors.black, width: 1),
                                   borderRadius: BorderRadius.circular(10)),
-                              child: const Center(child: Text("0")),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Center(
-                                child: FaIcon(
-                                  FontAwesomeIcons.plus,
-                                  color: Colors.white,
+                              child: Center(child: Text(controller.bedRoomCount.value.toString())),
+                            ),),
+                            GestureDetector(
+                              onTap: () => controller.bedRoomCount.value++,
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.plus,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             )
@@ -152,12 +163,13 @@ class FilterView extends GetView<HomeController> {
                   ],
                 ),
                 ExpansionTile(
+                  initiallyExpanded: true,
                   title: Row(
                     children: [
-                      Checkbox.adaptive(
-                        value: false,
+                      Obx(() =>Checkbox.adaptive(
+                        value:controller.bathRoomCount.value>0,
                         onChanged: (value) {},
-                      ),
+                      ),),
                       const Text(
                         "BathRoom",
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -175,20 +187,27 @@ class FilterView extends GetView<HomeController> {
                         ),
                         Row(
                           children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Center(
-                                child: FaIcon(
-                                  FontAwesomeIcons.minus,
-                                  color: Colors.white,
+                            GestureDetector(
+                              onTap: () {
+                                if(controller.bathRoomCount.value!=0){
+                                  controller.bathRoomCount.value--;
+                                }
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.minus,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                            Container(
+                           Obx(() => Container(
                               width: 40,
                               height: 40,
                               margin:
@@ -198,18 +217,21 @@ class FilterView extends GetView<HomeController> {
                                   border:
                                       Border.all(color: Colors.black, width: 1),
                                   borderRadius: BorderRadius.circular(10)),
-                              child: const Center(child: Text("0")),
-                            ),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Center(
-                                child: FaIcon(
-                                  FontAwesomeIcons.plus,
-                                  color: Colors.white,
+                              child: Center(child: Text(controller.bathRoomCount.value.toString())),
+                            ),),
+                            GestureDetector(
+                              onTap: () => controller.bathRoomCount.value++,
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.plus,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             )
@@ -229,7 +251,11 @@ class FilterView extends GetView<HomeController> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.rangeValues.value=RangeValues(500, 20000);
+                          controller.bedRoomCount.value=0;
+                          controller.bathRoomCount.value=0;
+                        },
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(15),
                             backgroundColor: Colors.white,
@@ -250,7 +276,7 @@ class FilterView extends GetView<HomeController> {
                           padding: const EdgeInsets.all(15),
                         ),
                         child: const Text(
-                          "Reset",
+                          "Apply",
                           style: TextStyle(color: Colors.white),
                         )),
                   ),
