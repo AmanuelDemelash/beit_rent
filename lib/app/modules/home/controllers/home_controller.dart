@@ -12,6 +12,8 @@ class HomeController extends GetxController {
   Rx<List<Property>> allProperty = RxList<Property>().obs;
   Rx<List<Property>> searchedProperty = RxList<Property>().obs;
 
+  RxBool isSearch=false.obs;
+
   RxInt bottomNavIndex = 0.obs;
   RxInt carouselIndex = 0.obs;
   RxBool viewModeList = false.obs;
@@ -64,6 +66,7 @@ class HomeController extends GetxController {
 
   Future<void> searchProperty(String name) async {
     if (allProperty.value.isNotEmpty) {
+      searchedProperty.value.clear();
       searchedProperty.value.addAll(allProperty.value
           .where(
             (element) => element.name!.contains(name),
@@ -92,4 +95,5 @@ class HomeController extends GetxController {
     _boxFavorite.clear();
     allFavorite.clear();
   }
+
 }
