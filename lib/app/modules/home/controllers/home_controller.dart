@@ -23,6 +23,9 @@ class HomeController extends GetxController {
 
   //filte
   Rx<RangeValues> rangeValues = RangeValues(500, 20000).obs;
+  RxInt bedRoomCount=0.obs;
+  RxInt bathRoomCount=0.obs;
+
   @override
   void onInit() {
     super.onInit();

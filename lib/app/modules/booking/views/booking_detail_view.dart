@@ -13,6 +13,9 @@ class BookingDetailView extends GetView {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              onPressed: () => Get.back(),
+              icon: const FaIcon(FontAwesomeIcons.arrowLeft)),
           title: const Text('Booking Detail'),
           centerTitle: true,
         ),

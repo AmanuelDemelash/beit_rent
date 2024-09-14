@@ -26,10 +26,7 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-                child: SizedBox(
-              width: Get.width,
-              height: Get.height,
-              child: SingleChildScrollView(
+                child:SingleChildScrollView(
                 padding: const EdgeInsets.all(15),
                 physics: const BouncingScrollPhysics(),
                 child: Column(
@@ -442,9 +439,10 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                   ],
                 ),
               ),
-            )),
+            ),
             Container(
               width: Get.width,
+              color: Colors.white,
               padding: const EdgeInsets.all(15),
               child: ElevatedButton(
                   onPressed: () =>
