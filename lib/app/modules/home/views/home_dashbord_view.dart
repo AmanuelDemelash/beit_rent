@@ -85,6 +85,15 @@ class HomeDashBordView extends GetView<HomeController> {
                             child: TextField(
                               controller: searchTextController,
                               keyboardType: TextInputType.text,
+                              onChanged: (value) {
+                               if(value.isNotEmpty){
+                                 controller.isSearch.value=true;
+                                 controller.searchProperty(value);
+                               }else{
+                                 controller.isSearch.value=false;
+                               }
+                               
+                              },
                               decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
@@ -156,38 +165,21 @@ class HomeDashBordView extends GetView<HomeController> {
               // apartment list
               Expanded(child: Obx(() => controller.isLoadingAllProperty.value ||
                       controller.allProperty.value.isEmpty
-                          ? SizedBox(
-                              width: Get.width,
-                              height: Get.height,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          ? NotingFound(controller: controller):controller.isSearch.value?
+                             Padding(
+                              padding:const EdgeInsets.all(8.0),
+                              child:Obx(() =>  Column(
                                 children: [
-                                  const Text("Noting Found",style: TextStyle(fontWeight: FontWeight.bold),),
-                                  const Text("there is noting found on this section"),
-                                 const SizedBox(height: 15,),
-                                 Obx(() => Container(
-                                   width: Get.width,
-                                   padding: const EdgeInsets.only(left: 30,right: 30),
-                                   child: ElevatedButton(
-                                     style: ElevatedButton.styleFrom(
-                                       padding:const EdgeInsets.all(13)
-                                     ),
-                                        onPressed: () {
-                                          controller.getAllProperty();
-                                          controller.getCustomer();
-                                        },
-                                        child:controller.isLoadingAllProperty.value?
-                                        LoadingAnimationWidget.fourRotatingDots(
-                                            color: Colors.white,
-                                            size: 30,
-                                          ) : const Text(
-                                          "Refresh",
-                                          style: TextStyle(color: Colors.white),
-                                        )),
-                                 ))
+                                 const Row(children: [Text("Search Result",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)],),
+                                  Expanded(child:controller.isSearch.value && controller.searchedProperty.value.isEmpty?
+                                      NotingFound(controller: controller):
+                                  ListView.builder(
+                                    itemCount:controller.searchedProperty.value.length,
+                                    itemBuilder:(context, index) =>ApartmentVerticalCard(property: controller.searchedProperty.value[index])
+                                  )
+                                  )
                                 ],
-                              ),
+                              ),)
                             )
                           : !controller.viewModeList.value
                               ? Padding(
@@ -281,6 +273,52 @@ class HomeDashBordView extends GetView<HomeController> {
             ],
           ),
         );
+  }
+}
+
+class NotingFound extends StatelessWidget {
+  const NotingFound({
+    super.key,
+    required this.controller,
+  });
+
+  final HomeController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: Get.width,
+        height: Get.height,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Noting Found",style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text("there is noting found on this section"),
+           const SizedBox(height: 15,),
+           Obx(() => Container(
+             width: Get.width,
+             padding: const EdgeInsets.only(left: 30,right: 30),
+             child: ElevatedButton(
+               style: ElevatedButton.styleFrom(
+                 padding:const EdgeInsets.all(13)
+               ),
+                  onPressed: () {
+                    controller.getAllProperty();
+                    controller.getCustomer();
+                  },
+                  child:controller.isLoadingAllProperty.value?
+                  LoadingAnimationWidget.fourRotatingDots(
+                      color: Colors.white,
+                      size: 30,
+                    ) : const Text(
+                    "Refresh",
+                    style: TextStyle(color: Colors.white),
+                  )),
+           ))
+          ],
+        ),
+      );
   }
 }
 

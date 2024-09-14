@@ -33,13 +33,57 @@ class AuthView extends GetView<AuthController> {
           child: ListView(
             physics: const BouncingScrollPhysics(),
             children: [
-              const Text(
-                "Language",
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                    color: ColorConstant.primaryColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17),
+              GestureDetector(
+                onTap:()=> Get.bottomSheet(BottomSheet(onClosing:() {}, builder:(context) => Container(
+                  width: Get.width,
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Change Language",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                      const SizedBox(height: 15,),
+                      Container(
+                        width: Get.width,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: RadioListTile.adaptive(value:"amharic", groupValue:"lang", onChanged:(value) {},
+                          title:const Text("Amharic"),
+                        ),
+                      ),
+                      Container(
+                        width: Get.width,
+                        margin:const EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: RadioListTile.adaptive(value:"amharic", groupValue:"lang", onChanged:(value) {},
+                          title:const Text("English"),
+                        ),
+                      ),
+                      const SizedBox(height: 20,),
+                      SizedBox(
+                        width: Get.width,
+                        child: ElevatedButton(onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              padding:const EdgeInsets.all(20)
+                            ),
+                            child:const Text("Done",style: TextStyle(color: Colors.white),)),
+                      )
+                    ],
+                  ),
+                ),)),
+                child: const Text(
+                  "Language",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                      color: ColorConstant.primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17),
+                ),
               ),
               Container(
                   width: Get.width,
