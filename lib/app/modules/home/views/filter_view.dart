@@ -37,19 +37,62 @@ class FilterView extends GetView<HomeController> {
                     ],
                   ),
                   childrenPadding: const EdgeInsets.all(15),
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                         "Type of location from where you want to calculate teh distance"),
+                    Row(
+                      children: [
+                        const Expanded(
+                            child: TextField(
+                          decoration: InputDecoration(
+                              hintText: "get your current location"),
+                        )),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                        FloatingActionButton(
+                          backgroundColor: Colors.black,
+                          onPressed: () {},
+                          child: const FaIcon(
+                            FontAwesomeIcons.locationCrosshairs,
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                    ListTile(
+                      leading: Checkbox.adaptive(
+                        value: false,
+                        onChanged: (value) {},
+                      ),
+                      title: const Text("Distance"),
+                    ),
+                    Obx(() => RangeSlider(
+                          values: controller.distanceRangeValues.value,
+                          labels: RangeLabels(
+                              "${controller.distanceRangeValues.value.start}",
+                              "${controller.distanceRangeValues.value.end}"),
+                          activeColor: Colors.black,
+                          inactiveColor: Colors.grey,
+                          min: 1,
+                          max: 10,
+                          divisions: 1,
+                          onChanged: (value) {
+                            controller.distanceRangeValues.value = value;
+                          },
+                        )),
                   ],
                 ),
                 ExpansionTile(
                   initiallyExpanded: true,
                   title: Row(
                     children: [
-                      Obx(() => Checkbox.adaptive(
-                        value:controller.rangeValues.value.end<20000,
-                        onChanged: (value) {},
-                      ),),
+                      Obx(
+                        () => Checkbox.adaptive(
+                          value: controller.rangeValues.value.end < 20000,
+                          onChanged: (value) {},
+                        ),
+                      ),
                       const Text(
                         "Price Range",
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -87,10 +130,12 @@ class FilterView extends GetView<HomeController> {
                   initiallyExpanded: true,
                   title: Row(
                     children: [
-                     Obx(() => Checkbox.adaptive(
-                        value:controller.bedRoomCount.value>0,
-                        onChanged: (value) {},
-                      ),),
+                      Obx(
+                        () => Checkbox.adaptive(
+                          value: controller.bedRoomCount.value > 0,
+                          onChanged: (value) {},
+                        ),
+                      ),
                       const Text(
                         "BedRoom",
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -110,7 +155,7 @@ class FilterView extends GetView<HomeController> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if(controller.bedRoomCount.value!=0){
+                                if (controller.bedRoomCount.value != 0) {
                                   controller.bedRoomCount.value--;
                                 }
                               },
@@ -128,18 +173,22 @@ class FilterView extends GetView<HomeController> {
                                 ),
                               ),
                             ),
-                            Obx(() =>Container(
-                              width: 40,
-                              height: 40,
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border:
-                                      Border.all(color: Colors.black, width: 1),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Center(child: Text(controller.bedRoomCount.value.toString())),
-                            ),),
+                            Obx(
+                              () => Container(
+                                width: 40,
+                                height: 40,
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: Colors.black, width: 1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                    child: Text(controller.bedRoomCount.value
+                                        .toString())),
+                              ),
+                            ),
                             GestureDetector(
                               onTap: () => controller.bedRoomCount.value++,
                               child: Container(
@@ -166,10 +215,12 @@ class FilterView extends GetView<HomeController> {
                   initiallyExpanded: true,
                   title: Row(
                     children: [
-                      Obx(() =>Checkbox.adaptive(
-                        value:controller.bathRoomCount.value>0,
-                        onChanged: (value) {},
-                      ),),
+                      Obx(
+                        () => Checkbox.adaptive(
+                          value: controller.bathRoomCount.value > 0,
+                          onChanged: (value) {},
+                        ),
+                      ),
                       const Text(
                         "BathRoom",
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -189,7 +240,7 @@ class FilterView extends GetView<HomeController> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if(controller.bathRoomCount.value!=0){
+                                if (controller.bathRoomCount.value != 0) {
                                   controller.bathRoomCount.value--;
                                 }
                               },
@@ -207,18 +258,22 @@ class FilterView extends GetView<HomeController> {
                                 ),
                               ),
                             ),
-                           Obx(() => Container(
-                              width: 40,
-                              height: 40,
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border:
-                                      Border.all(color: Colors.black, width: 1),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Center(child: Text(controller.bathRoomCount.value.toString())),
-                            ),),
+                            Obx(
+                              () => Container(
+                                width: 40,
+                                height: 40,
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: Colors.black, width: 1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                    child: Text(controller.bathRoomCount.value
+                                        .toString())),
+                              ),
+                            ),
                             GestureDetector(
                               onTap: () => controller.bathRoomCount.value++,
                               child: Container(
@@ -252,9 +307,10 @@ class FilterView extends GetView<HomeController> {
                   Expanded(
                     child: ElevatedButton(
                         onPressed: () {
-                          controller.rangeValues.value=RangeValues(500, 20000);
-                          controller.bedRoomCount.value=0;
-                          controller.bathRoomCount.value=0;
+                          controller.rangeValues.value =
+                              RangeValues(500, 20000);
+                          controller.bedRoomCount.value = 0;
+                          controller.bathRoomCount.value = 0;
                         },
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(15),

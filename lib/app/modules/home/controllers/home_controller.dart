@@ -12,7 +12,7 @@ class HomeController extends GetxController {
   Rx<List<Property>> allProperty = RxList<Property>().obs;
   Rx<List<Property>> searchedProperty = RxList<Property>().obs;
 
-  RxBool isSearch=false.obs;
+  RxBool isSearch = false.obs;
 
   RxInt bottomNavIndex = 0.obs;
   RxInt carouselIndex = 0.obs;
@@ -21,19 +21,20 @@ class HomeController extends GetxController {
   Rx<Customer> customer = Customer().obs;
 
   late Box _boxFavorite;
-  RxList<dynamic> allFavorite=RxList<dynamic>();
+  RxList<dynamic> allFavorite = RxList<dynamic>();
 
   //filte
   Rx<RangeValues> rangeValues = RangeValues(500, 20000).obs;
-  RxInt bedRoomCount=0.obs;
-  RxInt bathRoomCount=0.obs;
+  Rx<RangeValues> distanceRangeValues = RangeValues(1, 10).obs;
+  RxInt bedRoomCount = 0.obs;
+  RxInt bathRoomCount = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     getCustomer();
     getAllProperty();
-    _boxFavorite=Hive.box('favorite');
+    _boxFavorite = Hive.box('favorite');
   }
 
   Future<void> getAllProperty() async {
@@ -75,25 +76,38 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> addFavorite(Property property)async{
-    _boxFavorite.put(property.name!,{"id":property.id,"image":property.image![0],"name":property.name,"address":property.absoluteLocation!.address,"price":property.price});
-    Get.rawSnackbar(message: "Successfully added to saved!",backgroundColor: ColorConstant.primaryColor);
+  Future<void> addFavorite(Property property) async {
+    _boxFavorite.put(property.name!, {
+      "id": property.id,
+      "image": property.image![0],
+      "name": property.name,
+      "address": property.absoluteLocation!.address,
+      "price": property.price
+    });
+    Get.rawSnackbar(
+        message: "Successfully added to saved!",
+        backgroundColor: ColorConstant.primaryColor);
   }
-  Future<void> deleteFavorite(Property property)async{
+
+  Future<void> deleteFavorite(Property property) async {
     _boxFavorite.delete(property.name!);
-    Get.rawSnackbar(message: "Removed from saved!",backgroundColor: ColorConstant.primaryColor);
+    Get.rawSnackbar(
+        message: "Removed from saved!",
+        backgroundColor: ColorConstant.primaryColor);
   }
-  bool checkFavorite(String name){
+
+  bool checkFavorite(String name) {
     return _boxFavorite.containsKey(name);
   }
-  Future<void> getFavorites()async{
+
+  Future<void> getFavorites() async {
     allFavorite.clear();
-    var favorites= _boxFavorite.values.toList();
+    var favorites = _boxFavorite.values.toList();
     allFavorite.addAll(favorites.toList());
   }
-  Future<void> clearFavorites()async{
+
+  Future<void> clearFavorites() async {
     _boxFavorite.clear();
     allFavorite.clear();
   }
-
 }

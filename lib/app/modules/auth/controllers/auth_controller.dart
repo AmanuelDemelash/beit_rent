@@ -29,6 +29,7 @@ class AuthController extends GetxController {
         isLoginLoading.value=false;
       Get.offAllNamed(Routes.HOME);
       }else{
+        print(result.statusCode);
         isLoginLoading.value=false;
         Get.rawSnackbar(title: 'error',message: result.body['message'],backgroundColor:Colors.redAccent);
       }
