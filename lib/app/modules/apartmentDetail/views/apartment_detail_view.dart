@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/colorConstant.dart';
 import '../controllers/apartment_detail_controller.dart';
@@ -26,7 +27,7 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-                child:SingleChildScrollView(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.all(15),
                 physics: const BouncingScrollPhysics(),
                 child: Column(
@@ -387,7 +388,7 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                       height: 200,
                       child: ListView.builder(
                         padding: const EdgeInsets.all(9),
-                        itemCount: 6,
+                        itemCount: property.review!.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => Card(
                           elevation: 0.8,
@@ -406,7 +407,7 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                                       ),
                                       Row(
                                         children: List.generate(
-                                          5,
+                                          property.review![index].rating!,
                                           (index) => const Padding(
                                             padding: EdgeInsets.all(1),
                                             child: FaIcon(
@@ -419,17 +420,21 @@ class ApartmentDetailView extends GetView<ApartmentDetailController> {
                                       ),
                                     ],
                                   ),
-                                  const Expanded(
+                                  Expanded(
                                       child: Text(
-                                    "thank you for your service it was awosome app",
+                                    property.review![index].reviewText
+                                        .toString(),
                                     textAlign: TextAlign.start,
                                     softWrap: true, // Enable soft wrapping
                                     overflow: TextOverflow.visible,
                                   )),
-                                  const Text(
-                                    "Aug 20,2024",
+                                  Text(
+                                    DateFormat('yyyy-MM-dd')
+                                        .format(
+                                            property.review![index].createdAt!)
+                                        .toString(),
                                     textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 11),
+                                    style: const TextStyle(fontSize: 11),
                                   ),
                                 ],
                               )),

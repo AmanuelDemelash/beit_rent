@@ -19,260 +19,276 @@ class HomeDashBordView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const AppBarTitle(),
-          actions: [
-            Obx(
-              () => Get.find<GlobalController>().isLogIn.value
-                  ? Row(
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Become a Host",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                            onTap: () => Get.toNamed(Routes.NOTIFICATION),
-                            child: const FaIcon(FontAwesomeIcons.solidBell))
-                      ],
-                    )
-                  : ElevatedButton(
-                      onPressed: () => Get.toNamed(Routes.AUTH),
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
+      appBar: AppBar(
+        title: const AppBarTitle(),
+        actions: [
+          Obx(
+            () => Get.find<GlobalController>().isLogIn.value
+                ? Row(
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {},
+                          child: const Text(
+                            "Become a Host",
+                            style: TextStyle(color: Colors.white),
+                          )),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                          onTap: () => Get.toNamed(Routes.NOTIFICATION),
+                          child: const FaIcon(FontAwesomeIcons.solidBell))
+                    ],
+                  )
+                : ElevatedButton(
+                    onPressed: () => Get.toNamed(Routes.AUTH),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white),
+                    )),
+          ),
+          const SizedBox(
+            width: 10,
+          )
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(
+                  () {
+                    final customer = controller.customer.value.customer;
+                    return Text.rich(TextSpan(children: [
+                      TextSpan(
+                          text: 'Hi, ${customer?.firstName ?? ""} ',
+                          style: const TextStyle(fontSize: 17)),
+                      const TextSpan(
+                          text: '\nDiscover your dream house',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20))
+                    ]));
+                  },
+                ),
+                // search section
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, bottom: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: TextField(
+                        controller: searchTextController,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            controller.isSearch.value = true;
+                            controller.searchProperty(value);
+                          } else {
+                            controller.isSearch.value = false;
+                          }
+                        },
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            prefixIcon: const Padding(
+                                padding: EdgeInsets.all(10),
+                                child: FaIcon(
+                                  FontAwesomeIcons.magnifyingGlass,
+                                  color: Colors.grey,
+                                )),
+                            hintText: "Search",
+                            hintStyle: const TextStyle(color: Colors.grey),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 6.0, horizontal: 12.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black))),
                       )),
-            ),
-            const SizedBox(
-              width: 10,
-            )
-          ],
-        ),
-        body:  Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                color: Colors.white,
-                padding:const EdgeInsets.only(left: 15,top: 15,right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  Obx(
-                        () {
-                      final customer = controller.customer.value.customer;
-                      return Text.rich(TextSpan(children: [
-                        TextSpan(
-                            text: 'Hi, ${customer?.firstName ?? ""} ',
-                            style: const TextStyle(fontSize: 17)),
-                        const TextSpan(
-                            text: '\nDiscover your dream house',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20))
-                      ]));
-                    },
-                  ),
-                  // search section
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: TextField(
-                              controller: searchTextController,
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                               if(value.isNotEmpty){
-                                 controller.isSearch.value=true;
-                                 controller.searchProperty(value);
-                               }else{
-                                 controller.isSearch.value=false;
-                               }
-                               
-                              },
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  prefixIcon: const Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: FaIcon(
-                                        FontAwesomeIcons.magnifyingGlass,
-                                        color: Colors.grey,
+                      GestureDetector(
+                        onTap: () => Get.toNamed(Routes.FILTER),
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          margin: const EdgeInsets.only(right: 6, left: 6),
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(9)),
+                          child: const Center(
+                            child: FaIcon(
+                              FontAwesomeIcons.filter,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => controller.viewModeList.value =
+                            !controller.viewModeList.value,
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(9)),
+                          child: Obx(
+                            () => Center(
+                                child: controller.viewModeList.value
+                                    ? Image.asset(
+                                        "assets/images/list_view.png",
+                                        width: 24,
+                                        height: 24,
+                                      )
+                                    : Image.asset(
+                                        "assets/images/card_view.png",
+                                        width: 20,
+                                        height: 20,
                                       )),
-                                  hintText: "Search",
-                                  hintStyle: const TextStyle(color: Colors.grey),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 6.0, horizontal: 12.0),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                      const BorderSide(color: Colors.black))),
-                            )),
-                        GestureDetector(
-                          onTap: () => Get.toNamed(Routes.FILTER),
-                          child: Container(
-                            width: 45,
-                            height: 45,
-                            margin: const EdgeInsets.only(right: 6, left: 6),
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(9)),
-                            child: const Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.filter,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () => controller.viewModeList.value =
-                          !controller.viewModeList.value,
-                          child: Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(9)),
-                            child: Obx(
-                                  () => Center(
-                                  child: controller.viewModeList.value
-                                      ? Image.asset(
-                                    "assets/images/list_view.png",
-                                    width: 24,
-                                    height: 24,
-                                  )
-                                      : Image.asset(
-                                    "assets/images/card_view.png",
-                                    width: 20,
-                                    height: 20,
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],),
-              ),
-              // apartment list
-              Expanded(child: Obx(() => controller.isLoadingAllProperty.value ||
+                ),
+              ],
+            ),
+          ),
+          // apartment list
+          Expanded(
+              child: Obx(() => controller.isLoadingAllProperty.value ||
                       controller.allProperty.value.isEmpty
-                          ? NotingFound(controller: controller):controller.isSearch.value?
-                             Padding(
-                              padding:const EdgeInsets.all(8.0),
-                              child:Obx(() =>  Column(
-                                children: [
-                                 const Row(children: [Text("Search Result",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)],),
-                                  Expanded(child:controller.isSearch.value && controller.searchedProperty.value.isEmpty?
-                                      NotingFound(controller: controller):
-                                  ListView.builder(
-                                    itemCount:controller.searchedProperty.value.length,
-                                    itemBuilder:(context, index) =>ApartmentVerticalCard(property: controller.searchedProperty.value[index])
-                                  )
-                                  )
-                                ],
-                              ),)
-                            )
-                          : !controller.viewModeList.value
-                              ? Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: SizedBox(
-                                    width: Get.width,
-                                    height: Get.height,
-                                    child: RefreshIndicator(
-                                      onRefresh: () async {
-                                        controller.getAllProperty();
-                                        controller.getCustomer();
-                                      },
-                                      color: ColorConstant.primaryColor,
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.vertical,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            //horizontal list
-                                            SizedBox(
-                                              height: 260,
-                                              width: Get.width,
-                                              child: ListView.builder(
-                                                  itemCount: controller
-                                                      .allProperty.value.length,
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemBuilder: (context, index) => GestureDetector(
-                                                      onTap: () => Get.toNamed(
-                                                          Routes.APARTMENT_DETAIL,
-                                                          arguments: controller
-                                                              .allProperty
-                                                              .value[index]),
-                                                      child: ApartmentHorizontalCard(
+                  ? NotingFound(controller: controller)
+                  : controller.isSearch.value
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Obx(
+                            () => Column(
+                              children: [
+                                const Row(
+                                  children: [
+                                    Text(
+                                      "Search Result",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    )
+                                  ],
+                                ),
+                                Expanded(
+                                    child: controller.isSearch.value &&
+                                            controller
+                                                .searchedProperty.value.isEmpty
+                                        ? NotingFound(controller: controller)
+                                        : ListView.builder(
+                                            itemCount: controller
+                                                .searchedProperty.value.length,
+                                            itemBuilder: (context, index) =>
+                                                ApartmentVerticalCard(
+                                                    property: controller
+                                                        .searchedProperty
+                                                        .value[index])))
+                              ],
+                            ),
+                          ))
+                      : !controller.viewModeList.value
+                          ? Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: SizedBox(
+                                width: Get.width,
+                                height: Get.height,
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    controller.getAllProperty();
+                                    controller.getCustomer();
+                                  },
+                                  color: ColorConstant.primaryColor,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        //horizontal list
+                                        SizedBox(
+                                          height: 260,
+                                          width: Get.width,
+                                          child: ListView.builder(
+                                              itemCount: controller
+                                                  .allProperty.value.length,
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) => GestureDetector(
+                                                  onTap: () => Get.toNamed(
+                                                      Routes.APARTMENT_DETAIL,
+                                                      arguments: controller
+                                                          .allProperty
+                                                          .value[index]),
+                                                  child:
+                                                      ApartmentHorizontalCard(
                                                           property: controller
                                                               .allProperty
                                                               .value[index]))),
-                                            ),
-                                            //vertical list
-                                            const Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 14, bottom: 14),
-                                              child: Text(
-                                                "Season Top",
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold),
-                                              ),
-                                            ),
-                                            ListView.builder(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: controller
-                                                  .allProperty.value.length,
-                                              itemBuilder: (context, index) =>
-                                                  GestureDetector(
-                                                      onTap: () => Get.toNamed(
-                                                          Routes.APARTMENT_DETAIL,
-                                                          arguments: controller
-                                                              .allProperty
-                                                              .value[index]),
-                                                      child:
-                                                          ApartmentVerticalCard(
-                                                        property: controller
-                                                            .allProperty
-                                                            .value[index],
-                                                      )),
-                                            ),
-                                          ],
                                         ),
-                                      ),
+                                        //vertical list
+                                        const Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 14, bottom: 14),
+                                          child: Text(
+                                            "Season Top",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: controller
+                                              .allProperty.value.length,
+                                          itemBuilder: (context, index) =>
+                                              GestureDetector(
+                                                  onTap: () => Get.toNamed(
+                                                      Routes.APARTMENT_DETAIL,
+                                                      arguments: controller
+                                                          .allProperty
+                                                          .value[index]),
+                                                  child: ApartmentVerticalCard(
+                                                    property: controller
+                                                        .allProperty
+                                                        .value[index],
+                                                  )),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                              )
-                              : ListView.builder(
-                                  padding: const EdgeInsets.all(15),
-                                  itemCount: controller.allProperty.value.length,
-                                  itemBuilder: (context, index) => InkWell(
-                                    onTap: () => Get.toNamed(
-                                        Routes.APARTMENT_DETAIL,
-                                        arguments: controller
-                                            .allProperty.value[index]),
-                                    child: ApartmentListView(
-                                      property:
-                                          controller.allProperty.value[index],
-                                    ),
-                                  ),
-                                )))
-            ],
-          ),
-        );
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(15),
+                              itemCount: controller.allProperty.value.length,
+                              itemBuilder: (context, index) => InkWell(
+                                onTap: () => Get.toNamed(
+                                    Routes.APARTMENT_DETAIL,
+                                    arguments:
+                                        controller.allProperty.value[index]),
+                                child: ApartmentListView(
+                                  property: controller.allProperty.value[index],
+                                ),
+                              ),
+                            )))
+        ],
+      ),
+    );
   }
 }
 
@@ -287,38 +303,43 @@ class NotingFound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: Get.width,
-        height: Get.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Noting Found",style: TextStyle(fontWeight: FontWeight.bold),),
-            const Text("there is noting found on this section"),
-           const SizedBox(height: 15,),
-           Obx(() => Container(
-             width: Get.width,
-             padding: const EdgeInsets.only(left: 30,right: 30),
-             child: ElevatedButton(
-               style: ElevatedButton.styleFrom(
-                 padding:const EdgeInsets.all(13)
-               ),
-                  onPressed: () {
-                    controller.getAllProperty();
-                    controller.getCustomer();
-                  },
-                  child:controller.isLoadingAllProperty.value?
-                  LoadingAnimationWidget.fourRotatingDots(
-                      color: Colors.white,
-                      size: 30,
-                    ) : const Text(
-                    "Refresh",
-                    style: TextStyle(color: Colors.white),
-                  )),
-           ))
-          ],
-        ),
-      );
+      width: Get.width,
+      height: Get.height,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "Noting Found",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const Text("there is noting found on this section"),
+          const SizedBox(
+            height: 15,
+          ),
+          Obx(() => Container(
+                width: Get.width,
+                padding: const EdgeInsets.only(left: 30, right: 30),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(13)),
+                    onPressed: () {
+                      controller.getAllProperty();
+                      controller.getCustomer();
+                    },
+                    child: controller.isLoadingAllProperty.value
+                        ? LoadingAnimationWidget.fourRotatingDots(
+                            color: Colors.white,
+                            size: 30,
+                          )
+                        : const Text(
+                            "Refresh",
+                            style: TextStyle(color: Colors.white),
+                          )),
+              ))
+        ],
+      ),
+    );
   }
 }
 
@@ -389,25 +410,28 @@ class ApartmentListView extends StatelessWidget {
                     )),
                   ),
                 ),
-                 Positioned(
+                Positioned(
                     top: 6,
                     right: 10,
                     child: GestureDetector(
-                      onTap: (){
-                        Get.find<HomeController>().checkFavorite(property
-                            .name!)?Get.find<HomeController>().deleteFavorite(property):
-                        Get.find<HomeController>().addFavorite(property);
+                      onTap: () {
+                        Get.find<HomeController>().checkFavorite(property.name!)
+                            ? Get.find<HomeController>()
+                                .deleteFavorite(property)
+                            : Get.find<HomeController>().addFavorite(property);
                       },
-                      child:Get.find<HomeController>().checkFavorite(property
-                          .name!) ? const FaIcon(
-                        FontAwesomeIcons.solidHeart,
-                        color: ColorConstant.primaryColor,
-                        size: 30,
-                      ) : const FaIcon(
-                        FontAwesomeIcons.heart,
-                        color: Colors.white,
-                        size:26,
-                      ),
+                      child: Get.find<HomeController>()
+                              .checkFavorite(property.name!)
+                          ? const FaIcon(
+                              FontAwesomeIcons.solidHeart,
+                              color: ColorConstant.primaryColor,
+                              size: 30,
+                            )
+                          : const FaIcon(
+                              FontAwesomeIcons.heart,
+                              color: Colors.white,
+                              size: 26,
+                            ),
                     ))
               ],
             ),
@@ -518,8 +542,10 @@ class ApartmentVerticalCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
                       imageUrl: property.image![0].toString(),
-                      placeholder: (context, url) =>
-                          Image.asset("assets/images/placeholder.png"),
+                      placeholder: (context, url) => Image.asset(
+                        "assets/images/placeholder.png",
+                        fit: BoxFit.fill,
+                      ),
                       errorWidget: (context, url, error) =>
                           const FaIcon(FontAwesomeIcons.image),
                       fit: BoxFit.cover,
@@ -529,85 +555,88 @@ class ApartmentVerticalCard extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: GetBuilder(
-                    init:Get.find<HomeController>(),
-                    builder: (controller) => ListTile(
-                      trailing: GestureDetector(
-                        onTap: (){
-                          Get.find<HomeController>().checkFavorite(property
-                              .name!)?Get.find<HomeController>().deleteFavorite(property):
-                          Get.find<HomeController>().addFavorite(property);
-                        },
-                        child: Get.find<HomeController>().checkFavorite(property
-                            .name!) ? const FaIcon(
-                          FontAwesomeIcons.solidHeart,
-                          color: ColorConstant.primaryColor,
-                          size: 30,
-                        ) : const FaIcon(
-                          FontAwesomeIcons.heart,
-                          color: ColorConstant.primaryColor,
-                          size: 30,
+                    child: GetBuilder(
+                  init: Get.find<HomeController>(),
+                  builder: (controller) => ListTile(
+                    trailing: GestureDetector(
+                      onTap: () {
+                        Get.find<HomeController>().checkFavorite(property.name!)
+                            ? Get.find<HomeController>()
+                                .deleteFavorite(property)
+                            : Get.find<HomeController>().addFavorite(property);
+                      },
+                      child: Get.find<HomeController>()
+                              .checkFavorite(property.name!)
+                          ? const FaIcon(
+                              FontAwesomeIcons.solidHeart,
+                              color: ColorConstant.primaryColor,
+                              size: 30,
+                            )
+                          : const FaIcon(
+                              FontAwesomeIcons.heart,
+                              color: ColorConstant.primaryColor,
+                              size: 30,
+                            ),
+                    ),
+                    title: Text(
+                      property.name!,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    subtitle: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.locationDot,
+                              size: 15,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(
+                              width: 3,
+                            ),
+                            Expanded(
+                              child: Text(
+                                property.absoluteLocation!.address!,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                      title: Text(
-                        property.name!,
-                        style: const TextStyle(fontSize: 18
+                        const SizedBox(
+                          height: 5,
                         ),
-                      ),
-                      subtitle: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const FaIcon(
-                                FontAwesomeIcons.locationDot,
-                                size: 15,
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(
-                                width: 3,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  property.absoluteLocation!.address!,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.start,
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "${property.price} ETB",
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              const Text(" per 1 day")
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              const FaIcon(
-                                FontAwesomeIcons.bed,
-                                size: 17,
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(
-                                width: 3,
-                              ),
-                              Text("${property.bedRoom!.count} Bed Room")
-                            ],
-                          )
-                        ],
-                      ),
-                    ),))
+                        Row(
+                          children: [
+                            Text(
+                              "${property.price} ETB",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Expanded(child: const Text(" per 1 day"))
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.bed,
+                              size: 17,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(
+                              width: 3,
+                            ),
+                            Text("${property.bedRoom!.count} Bed Room")
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ))
               ],
             ),
             Row(
